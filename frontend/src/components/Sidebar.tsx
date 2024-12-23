@@ -30,14 +30,14 @@ const Sidebar = () => {
         <div className="bg-[#F4F4F4] pt-8">
             <ul className="space-y-2">
                 {
-                    options.map((option) => (
-                        <li className={`flex items-center justify-between gap-16 py-2 ${selected === option.title && "bg-[#F4EDAF]"}`}>
-                        <div className="flex pl-6 gap-5">
-                            <img src={option.icon} className="h-8" alt="Dashboard" />
-                            <span className="text-xl">{option.title}</span>
-                        </div>
-                        <IoCaretForward className={`text-xl mr-2 ${selected !== option.title && "text-[#c4c4c4]"}`} />
-                    </li>
+                    options.map((option, idx) => (
+                        <li key={idx} className={`flex items-center justify-between gap-16 py-2 ${selected === option.title && "bg-[#F4EDAF]"}`}>
+                            <div className="flex pl-6 gap-5">
+                                <img src={option.icon} className="h-8" alt="Dashboard" />
+                                <span className="text-xl">{option.title}</span>
+                            </div>
+                            <IoCaretForward className={`text-xl mr-2 ${selected !== option.title && "text-[#c4c4c4]"}`} />
+                        </li>
                     ))
                 }
             </ul>
