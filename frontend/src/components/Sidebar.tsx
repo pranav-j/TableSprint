@@ -5,37 +5,41 @@ import products from "../assets/products.svg";
 import { IoCaretForward } from "react-icons/io5";
 
 const Sidebar = () => {
+    const options = [
+        {
+            icon: home,
+            title: "Dashboard"
+        },
+        {
+            icon: category,
+            title: "Category"
+        },
+        {
+            icon: subcategory,
+            title: "Subcategory"
+        },
+        {
+            icon: products,
+            title: "Products"
+        }
+    ]
+
+    const selected = "Dashboard";
+
     return(
-        <div className="max-w-[253px] bg-[#F4F4F4] pt-8">
+        <div className="bg-[#F4F4F4] pt-8">
             <ul className="space-y-2">
-                <li className="flex items-center justify-between py-2 bg-[#F4EDAF]">
-                    <div className="flex pl-6 gap-3">
-                        <img src={home} className="h-8" alt="Dashboard" />
-                        <span className="text-xl">Dashboard</span>
-                    </div>
-                    <IoCaretForward className="text-xl mr-2" />
-                </li>
-                <li className="flex items-center justify-between py-2">
-                    <div className="flex pl-6 gap-3">
-                        <img src={category} className="h-8" alt="Category" />
-                        <span className="text-xl">Category</span>
-                    </div>
-                    <IoCaretForward className="text-xl mr-2 text-[#d4d4d4]" />
-                </li>
-                <li className="flex items-center justify-between py-2">
-                    <div className="flex pl-6 gap-3">
-                        <img src={subcategory} className="h-8" alt="Subcategory" />
-                        <span className="text-xl">Subcategory</span>
-                    </div>
-                    <IoCaretForward className="text-xl mr-2 text-[#d4d4d4]" />
-                </li>
-                <li className="flex items-center justify-between py-2">
-                    <div className="flex pl-6 gap-3">
-                        <img src={products} className="h-8" alt="Products" />
-                        <span className="text-xl">Products</span>
-                    </div>
-                    <IoCaretForward className="text-xl mr-2 text-[#d4d4d4]" />
-                </li>
+                {
+                    options.map((option) => (
+                        <li className={`flex items-center justify-between gap-16 py-2 ${selected === option.title && "bg-[#F4EDAF]"}`}>
+                        <div className="flex pl-6 gap-5">
+                            <img src={option.icon} className="h-8" alt="Dashboard" />
+                            <span className="text-xl">{option.title}</span>
+                        </div>
+                        <IoCaretForward className={`text-xl mr-2 ${selected !== option.title && "text-[#c4c4c4]"}`} />
+                    </li>
+                    ))
+                }
             </ul>
         </div>
     )
