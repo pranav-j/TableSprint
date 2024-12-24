@@ -3,7 +3,7 @@ import category from "../assets/category.svg";
 import subcategory from "../assets/subcategory.svg";
 import products from "../assets/products.svg";
 import { IoCaretForward } from "react-icons/io5";
-import { setActiveTab } from "../redux/tabAndFormSlice";
+import { setActiveTab, resetOpenForm } from "../redux/tabAndFormSlice";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 
 
@@ -14,6 +14,7 @@ const Sidebar = () => {
 
     const handleTabChange = (tab: string) => {
         dispatch(setActiveTab(tab));
+        dispatch(resetOpenForm());
     }
 
     const options = [

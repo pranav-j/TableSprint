@@ -9,6 +9,7 @@ import { useAppSelector } from "../redux/reduxHooks";
 const Dashboard = () => {
 
     const activeTab = useAppSelector((state) => state.tabAndFormReducer.activeTab);
+    const openForm = useAppSelector((state) => state.tabAndFormReducer.openForm);
 
     return(
         <div className="flex flex-col h-screen overflow-hidden">
@@ -16,9 +17,10 @@ const Dashboard = () => {
             <div className="flex flex-1 overflow-hidden">
                 <Sidebar />
                 <div className="flex-1 overflow-auto">
-                    { activeTab === "Dashboard" && <AdminView /> }
-                    { activeTab === "Category" && <Category /> }
-                    <CategoryForm />
+                    { (activeTab === "Dashboard" && !openForm) && <AdminView /> }
+                    { (activeTab === "Category" && !openForm) && <Category /> }
+                    { (openForm === "Add Category" && activeTab === "Category") && <CategoryForm />}
+                    
                 </div>
             </div>
             
