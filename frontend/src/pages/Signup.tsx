@@ -1,8 +1,10 @@
 import React, { useState, ChangeEvent } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Eye, EyeOff } from 'lucide-react';
+// import axiosInstance from "../utils/axiosInstance";
 import background from "../assets/background.svg";
 import TSlogo from "../assets/TSlogo.png";
+import axios from 'axios';
 
 interface FormData {
     userName: string;
@@ -30,9 +32,9 @@ const SignupPage = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
+  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+    const response = await axios.post(`http://localhost:3000/api/auth/signup`, formData)
     console.log('Form submitted:', formData);
   };
 
