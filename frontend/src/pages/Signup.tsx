@@ -32,6 +32,7 @@ const SignupPage = () => {
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>): void => {
     e.preventDefault();
+    
     console.log('Form submitted:', formData);
   };
 
