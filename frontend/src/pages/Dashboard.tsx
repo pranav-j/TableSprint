@@ -18,7 +18,6 @@ const Dashboard = () => {
                 <div className="flex-1 overflow-auto">
                     { activeTab === "Dashboard" && <AdminView /> }
                     { activeTab === "Category" && <Category /> }
-                    {/* <Category /> */}
                     <CategoryForm />
                 </div>
             </div>

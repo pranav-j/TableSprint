@@ -1,7 +1,7 @@
 import React, { useState, ChangeEvent } from 'react';
 import { TextField, InputAdornment, IconButton } from '@mui/material';
 import { Eye, EyeOff } from 'lucide-react';
-// import axiosInstance from "../utils/axiosInstance";
+import { useNavigate } from 'react-router-dom';
 import background from "../assets/background.svg";
 import TSlogo from "../assets/TSlogo.png";
 import axios from 'axios';
@@ -19,6 +19,8 @@ const SignupPage = () => {
     email: '',
     password: ''
   });
+  const [error, setError] = useState<string | null>(null);
+  const navigate = useNavigate();
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = e.target;
@@ -32,10 +34,20 @@ const SignupPage = () => {
     setShowPassword(!showPassword);
   };
 
-  const handleSubmit = async(e: React.FormEvent<HTMLFormElement>) => {
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    const response = await axios.post(`http://localhost:3000/api/auth/signup`, formData)
-    console.log('Form submitted:', formData);
+    try {
+      const response = await axios.post(`http://localhost:3000/api/auth/signup`, formData);
+      console.log('Form submitted:', formData);
+
+      // After successful signup, navigate to dashboard
+      if (response.status === 201) {
+        navigate('/login');
+      }
+    } catch (error) {
+      console.error('Signup error:', error);
+      setError('Something went wrong. Please try again later.');
+    }
   };
 
   return (
@@ -54,6 +66,13 @@ const SignupPage = () => {
             <img className='mb-4' src={TSlogo} alt="TSlogo" />
             <h1 className="text-xl text-gray-600">Welcome to TableSprint admin</h1>
           </div>
+
+          {/* Error message */}
+          {error && (
+            <div className="text-red-500 text-center mb-4">
+              {error}
+            </div>
+          )}
 
           {/* Form */}
           <form className="space-y-6" onSubmit={handleSubmit}>
@@ -114,20 +133,12 @@ const SignupPage = () => {
               }}
             />
 
-            <div className="flex items-center justify-end">
-              <button
-                type="button"
-                className="text-purple-600 text-sm hover:text-purple-500"
-              >
-                Forgot Password?
-              </button>
-            </div>
 
             <button
               type="submit"
               className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
             >
-              Log In
+              Sign Up
             </button>
           </form>
         </div>

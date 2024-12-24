@@ -1,15 +1,10 @@
 const express = require("express");
-// const User = require("../models/User");
 const User = require("../models/user.js")
-// const bcrypt = require("bcryptjs");
 const jwt = require("jsonwebtoken");
 
 const router = express.Router();
 
-// Signup Route
-router.post("/signup", async (req, res) => {
-    console.log("Signup request.........................");
-    
+router.post("/signup", async (req, res) => {    
     const { userName, email, password } = req.body;
 
     console.log({ userName, email, password });
@@ -22,17 +17,18 @@ router.post("/signup", async (req, res) => {
 
         const hashedPassword = User.hashPassword(password);
         const user = await User.create({ username: userName, email, password: hashedPassword });
-
-        res.status(201).json({ message: "User created successfully", user });
+        console.log("Signup succesfull.................", user);
+        
+        res.status(201).json({ message: "User created successfully" });
     } catch (error) {
         res.status(500).json({ message: "Server error" });
     }
 });
 
-// Login Route
 router.post("/login", async (req, res) => {
     const { email, password } = req.body;
-
+    console.log("Logging in....................");
+    
     try {
         const user = await User.findOne({ where: { email } });
         if (!user || !User.validatePassword(password, user.password)) {
@@ -40,10 +36,25 @@ router.post("/login", async (req, res) => {
         }
 
         const token = jwt.sign({ userId: user.id }, "your_jwt_secret", { expiresIn: "1h" });
-        res.json({ message: "Login successful", token });
+
+        // Set the token as a secure HTTP-only cookie
+        res.cookie('authToken', token, {
+            httpOnly: true, // Prevent JavaScript access to the cookie
+            // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
+            secure: false,
+            sameSite: 'strict', // Prevent CSRF
+            maxAge: 3600000 // Cookie expiration in milliseconds (1 hour)
+        });
+
+        res.status(200).json({ 
+            message: "Login successful", 
+            username: user.username 
+        });
     } catch (error) {
+        console.error(error);
         res.status(500).json({ message: "Server error" });
     }
 });
+
 
 module.exports = router;
