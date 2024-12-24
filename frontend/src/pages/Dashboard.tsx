@@ -1,3 +1,4 @@
+import CategoryForm from "../components/AddOrEditCategory";
 import AdminView from "../components/AdminView";
 import Category from "../components/Category";
 import Header from "../components/Header";
@@ -12,7 +13,8 @@ const Dashboard = () => {
                 <Sidebar />
                 <div className="flex-1 overflow-auto">
                     {/* <AdminView /> */}
-                    <Category />
+                    {/* <Category /> */}
+                    <CategoryForm />
                 </div>
             </div>
             
