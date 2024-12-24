@@ -10,4 +10,21 @@ const initialState: TabAndFormState = {
     openForm: null
 };
 
-const 
+const tabAndFormSlice = createSlice({
+    name: "TabAndForm",
+    initialState,
+    reducers: {
+        setActiveTab: (state, action: PayloadAction<string>) => {
+            state.activeTab = action.payload;
+        },
+        setOpenForm: (state, action: PayloadAction<string>) => {
+            state.openForm = action.payload;
+        },
+        resetOpenForm: (state) => {
+            state.openForm = null;
+        },
+    }
+});
+
+export const { setActiveTab, setOpenForm, resetOpenForm } = tabAndFormSlice.actions;
+export default tabAndFormSlice.reducer;

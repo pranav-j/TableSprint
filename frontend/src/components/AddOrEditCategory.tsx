@@ -1,4 +1,6 @@
 import React, { useState } from "react";
+import { LuImagePlus } from "react-icons/lu";
+
 import {
   TextField,
   Button,
@@ -47,37 +49,19 @@ const CategoryForm = () => {
       }}
     >
       {/* Category Name */}
-      {/* <TextField
+      <TextField
         required
         id="categoryName"
         label="Category Name"
         value={formData.categoryName}
         onChange={handleInputChange}
         fullWidth
-      /> */}
-      <TextField
-  required
-  id="categoryName"
-  label="Category Name"
-  value={formData.categoryName}
-  onChange={handleInputChange}
-  fullWidth
-  sx={{
-    "& .MuiOutlinedInput-root": {
-      borderRadius: 4, // Border radius
-    },
-    "& .MuiInputLabel-root": {
-      fontSize: "1.2rem", // Larger label font
-      transform: "translate(14px, 12px) scale(1)", // Adjust label position when not focused
-    },
-    "& .MuiInputLabel-shrink": {
-      transform: "translate(14px, -6px) scale(0.85)", // Adjust label position when focused
-    },
-    "& .MuiOutlinedInput-input": {
-      padding: "16.5px 20px", // Adjust input padding to align properly with the label
-    },
-  }}
-/>
+        sx={{
+            "& .MuiOutlinedInput-root": {
+            borderRadius: 4,
+            }
+        }}
+      />
 
 
       {/* Category Sequence */}
@@ -89,10 +73,22 @@ const CategoryForm = () => {
         value={formData.categorySequence}
         onChange={handleInputChange}
         fullWidth
+        sx={{
+            "& .MuiOutlinedInput-root": {
+            borderRadius: 4,
+            }
+        }}
       />
 
       {/* Status Dropdown */}
-        <FormControl fullWidth>
+        <FormControl
+            fullWidth
+            sx={{
+                "& .MuiOutlinedInput-root": {
+                borderRadius: 4,
+                }
+            }}
+        >
             <InputLabel id="status-label">Status</InputLabel>
             <Select
                 labelId="status-label"
@@ -123,41 +119,31 @@ const CategoryForm = () => {
     sx={{ width: 100, height: 100, objectFit: "cover", borderRadius: 1 }}
   />
   <Box
-    sx={{
-      width: 200,
-      height: 100,
-      border: "1px dashed gray",
-      display: "flex",
-      alignItems: "center",
-      justifyContent: "center",
-      borderRadius: 1,
-      cursor: "pointer", // Add pointer cursor for better UX
-      position: "relative",
-    }}
+    className="w-52 h-24 border-2 border-dashed border-gray-400 flex items-center justify-center rounded-[10px] cursor-pointer relative"
     onClick={() => document.getElementById("image-upload")?.click()}
-  >
-    <span>Upload Maximum allowed file size is 10MB</span>
+    >
+        
+    <span className="text-center text-sm flex flex-col justify-center items-center"><LuImagePlus className="size-10" />Upload Maximum allowed file size is 10MB</span>
     <input
-      type="file"
-      accept="image/*"
-      id="image-upload"
-      style={{
-        display: "none",
-      }}
-      onChange={(e) => {
+        type="file"
+        accept="image/*"
+        id="image-upload"
+        className="hidden"
+        onChange={(e) => {
         if (e.target.files && e.target.files[0]) {
-          const reader = new FileReader();
-          reader.onload = () => {
+            const reader = new FileReader();
+            reader.onload = () => {
             setFormData({
-              ...formData,
-              image: reader.result as string, // Convert file to base64 string
+                ...formData,
+                image: reader.result as string, // Convert file to base64 string
             });
-          };
-          reader.readAsDataURL(e.target.files[0]);
+            };
+            reader.readAsDataURL(e.target.files[0]);
         }
-      }}
+        }}
     />
-  </Box>
+    </Box>
+
 </Box>
 
 
