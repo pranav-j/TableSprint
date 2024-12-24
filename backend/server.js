@@ -1,23 +1,30 @@
-// server.js
 require("dotenv").config();
 const express = require("express");
 const cors = require("cors");
 const bodyParser = require("body-parser");
+const cookieParser = require('cookie-parser');
 const authRoutes = require("./routes/auth");
+const categoryRoutes = require("./routes/category")
 const sequelize = require("./models/index");
 
 const app = express();
-const port = 3000;
+// const port = 3000;
+const port = process.env.PORT
 
-app.use(bodyParser.json());
+// app.use(bodyParser.json());
+app.use(bodyParser.json({ limit: '10mb' }));  // Set limit for JSON body (10MB in this example)
+app.use(bodyParser.urlencoded({ limit: '10mb', extended: true }));  // Set limit for URL-encoded data
+app.use(cookieParser());
 
 app.use(cors({ 
-    // origin: process.env.FRONTEND_URL,
-    origin: "http://localhost:5173",
+    origin: process.env.FRONTEND_URL,
+    // origin: "http://localhost:5173",
     credentials: true 
 }));
 
 app.use("/api/auth", authRoutes);
+app.use("/api", categoryRoutes);
+
 
 // Authenticate the database connection
 sequelize.authenticate()

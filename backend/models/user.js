@@ -1,15 +1,12 @@
-// models/User.js
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("./index");
 const bcrypt = require("bcryptjs");
 
 class User extends Model {
-  // Method to hash password before saving
   static hashPassword(password) {
     return bcrypt.hashSync(password, 10);
   }
 
-  // Method to validate password
   static validatePassword(password, hashedPassword) {
     return bcrypt.compareSync(password, hashedPassword);
   }

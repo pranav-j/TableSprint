@@ -3,7 +3,7 @@ import { LuImagePlus } from "react-icons/lu";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch } from "../redux/reduxHooks";
 import { resetOpenForm } from "../redux/tabAndFormSlice";
-
+import axios from "axios";
 
 import {
   TextField,
@@ -39,8 +39,20 @@ const CategoryForm = () => {
     });
   };
 
-  const handleSave = () => {
+  const handleSave = async () => {
     console.log("Form Data:", formData);
+    try {
+      const response = await axios.post(
+        "http://localhost:3000/api/category",
+        formData,
+        {
+          withCredentials: true,
+        }
+      );
+      console.log("Form submitted successfully:", response.data);
+    } catch (error) {
+      console.error("Error submitting form:", error);
+    }
   };
 
   const handleCancel = () => {
@@ -154,7 +166,6 @@ const CategoryForm = () => {
       </div>
       </div>
 
-      {/* Buttons */}
       <div className="flex justify-end space-x-4 mt-4">
         <button
           className="px-4 py-2 border border-gray-500 text-gray-500 rounded hover:bg-gray-100"
