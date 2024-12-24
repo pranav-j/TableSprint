@@ -4,15 +4,16 @@ import { Eye, EyeOff } from 'lucide-react';
 import background from "../assets/background.svg";
 import TSlogo from "../assets/TSlogo.png";
 
-
 interface FormData {
-  email: string;
-  password: string;
+    userName: string;
+    email: string;
+    password: string;
 }
 
-const Login = () => {
+const SignupPage = () => {
   const [showPassword, setShowPassword] = useState<boolean>(false);
   const [formData, setFormData] = useState<FormData>({
+    userName: '',
     email: '',
     password: ''
   });
@@ -43,7 +44,7 @@ const Login = () => {
         }}
     >
       {/* Optional overlay to ensure form readability */}
-      <div className="min-h-screen bg-black/30 flex items-center p-6">
+      <div className="min-h-screen bg-[#5C218B]/30 flex items-center p-20">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
           {/* Logo and Title */}
           <div className="flex flex-col items-center mb-8">
@@ -53,6 +54,19 @@ const Login = () => {
 
           {/* Form */}
           <form className="space-y-6" onSubmit={handleSubmit}>
+            <TextField
+              required
+              fullWidth
+              id="userName"
+              name="userName"
+              label="User name"
+              variant="outlined"
+              value={formData.userName}
+              onChange={handleChange}
+              className="bg-white"
+              type="text"
+            />
+
             <TextField
               required
               fullWidth
@@ -119,4 +133,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default SignupPage;

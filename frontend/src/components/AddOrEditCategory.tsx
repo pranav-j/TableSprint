@@ -1,9 +1,179 @@
+// import React, { useState } from "react";
+// import { LuImagePlus } from "react-icons/lu";
+
+// import {
+//   TextField,
+//   Button,
+//   MenuItem,
+//   Select,
+//   InputLabel,
+//   FormControl,
+//   Box,
+//   SelectChangeEvent,
+// } from "@mui/material";
+
+// const CategoryForm = () => {
+//   const [formData, setFormData] = useState({
+//     categoryName: " ",
+//     categorySequence: " ",
+//     status: "Active",
+//     image: " ",
+//   });
+
+//   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+//     setFormData({
+//       ...formData,
+//       [e.target.id]: e.target.value,
+//     });
+//   };
+
+//   const handleStatusChange = (event: SelectChangeEvent<string>) => {
+//     setFormData({
+//       ...formData,
+//       status: event.target.value,
+//     });
+//   };
+
+//   const handleSave = () => {
+//     console.log("Form Data:", formData);
+//   };
+
+//   return (
+//     <Box
+//       component="form"
+//       sx={{
+//         display: "grid",
+//         gridTemplateColumns: "1fr 1fr 1fr",
+//         gap: 2,
+//         padding: 3,
+//       }}
+//     >
+//       {/* Category Name */}
+//       <TextField
+//         required
+//         id="categoryName"
+//         label="Category Name"
+//         value={formData.categoryName}
+//         onChange={handleInputChange}
+//         fullWidth
+//         sx={{
+//             "& .MuiOutlinedInput-root": {
+//             borderRadius: 4,
+//             }
+//         }}
+//       />
+
+
+//       {/* Category Sequence */}
+//       <TextField
+//         required
+//         id="categorySequence"
+//         label="Category Sequence"
+//         type="number"
+//         value={formData.categorySequence}
+//         onChange={handleInputChange}
+//         fullWidth
+//         sx={{
+//             "& .MuiOutlinedInput-root": {
+//             borderRadius: 4,
+//             }
+//         }}
+//       />
+
+//       {/* Status Dropdown */}
+//         <FormControl
+//             fullWidth
+//             sx={{
+//                 "& .MuiOutlinedInput-root": {
+//                 borderRadius: 4,
+//                 }
+//             }}
+//         >
+//             <InputLabel id="status-label">Status</InputLabel>
+//             <Select
+//                 labelId="status-label"
+//                 id="status"
+//                 value={formData.status}
+//                 onChange={handleStatusChange}
+//                 label="Status"
+//             >
+//                 <MenuItem value="Active">Active</MenuItem>
+//                 <MenuItem value="Inactive">Inactive</MenuItem>
+//             </Select>
+//         </FormControl>
+
+
+//       {/* Upload Image */}
+//       <Box
+//   sx={{
+//     gridColumn: "1 / span 3",
+//     display: "flex",
+//     alignItems: "center",
+//     gap: 2,
+//   }}
+// >
+//   <Box
+//     component="img"
+//     src={formData.image || "https://via.placeholder.com/100"}
+//     alt="Uploaded"
+//     sx={{ width: 100, height: 100, objectFit: "cover", borderRadius: 1 }}
+//   />
+//   <Box
+//     className="w-52 h-24 border-2 border-dashed border-gray-400 flex items-center justify-center rounded-[10px] cursor-pointer relative"
+//     onClick={() => document.getElementById("image-upload")?.click()}
+//     >
+        
+//     <span className="text-center text-sm flex flex-col justify-center items-center"><LuImagePlus className="size-10" />Upload Maximum allowed file size is 10MB</span>
+//     <input
+//         type="file"
+//         accept="image/*"
+//         id="image-upload"
+//         className="hidden"
+//         onChange={(e) => {
+//         if (e.target.files && e.target.files[0]) {
+//             const reader = new FileReader();
+//             reader.onload = () => {
+//             setFormData({
+//                 ...formData,
+//                 image: reader.result as string, // Convert file to base64 string
+//             });
+//             };
+//             reader.readAsDataURL(e.target.files[0]);
+//         }
+//         }}
+//     />
+//     </Box>
+
+// </Box>
+
+
+// <Box className="col-span-3 flex justify-end mt-2 space-x-4">
+//   <button
+//     className="px-4 py-2 border border-gray-500 text-gray-500 rounded hover:bg-gray-100"
+//     onClick={() => console.log("Cancel")}
+//   >
+//     Cancel
+//   </button>
+//   <button
+//     className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+//     onClick={handleSave}
+//   >
+//     Save
+//   </button>
+// </Box>
+
+//     </Box>
+//   );
+// };
+
+// export default CategoryForm;
+
+
 import React, { useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
-
+import { MdOutlineArrowBack } from "react-icons/md";
 import {
   TextField,
-  Button,
   MenuItem,
   Select,
   InputLabel,
@@ -14,10 +184,10 @@ import {
 
 const CategoryForm = () => {
   const [formData, setFormData] = useState({
-    categoryName: " ",
-    categorySequence: " ",
+    categoryName: "",
+    categorySequence: "",
     status: "Active",
-    image: " ",
+    image: "",
   });
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -39,130 +209,134 @@ const CategoryForm = () => {
   };
 
   return (
-    <Box
-      component="form"
-      sx={{
-        display: "grid",
-        gridTemplateColumns: "1fr 1fr 1fr",
-        gap: 2,
-        padding: 3,
-      }}
-    >
-      {/* Category Name */}
-      <TextField
-        required
-        id="categoryName"
-        label="Category Name"
-        value={formData.categoryName}
-        onChange={handleInputChange}
-        fullWidth
-        sx={{
-            "& .MuiOutlinedInput-root": {
-            borderRadius: 4,
-            }
-        }}
-      />
-
-
-      {/* Category Sequence */}
-      <TextField
-        required
-        id="categorySequence"
-        label="Category Sequence"
-        type="number"
-        value={formData.categorySequence}
-        onChange={handleInputChange}
-        fullWidth
-        sx={{
-            "& .MuiOutlinedInput-root": {
-            borderRadius: 4,
-            }
-        }}
-      />
-
-      {/* Status Dropdown */}
-        <FormControl
-            fullWidth
-            sx={{
-                "& .MuiOutlinedInput-root": {
-                borderRadius: 4,
-                }
-            }}
-        >
-            <InputLabel id="status-label">Status</InputLabel>
-            <Select
-                labelId="status-label"
-                id="status"
-                value={formData.status}
-                onChange={handleStatusChange}
-                label="Status"
-            >
-                <MenuItem value="Active">Active</MenuItem>
-                <MenuItem value="Inactive">Inactive</MenuItem>
-            </Select>
-        </FormControl>
-
-
-      {/* Upload Image */}
-      <Box
-  sx={{
-    gridColumn: "1 / span 3",
-    display: "flex",
-    alignItems: "center",
-    gap: 2,
-  }}
->
-  <Box
-    component="img"
-    src={formData.image || "https://via.placeholder.com/100"}
-    alt="Uploaded"
-    sx={{ width: 100, height: 100, objectFit: "cover", borderRadius: 1 }}
-  />
-  <Box
-    className="w-52 h-24 border-2 border-dashed border-gray-400 flex items-center justify-center rounded-[10px] cursor-pointer relative"
-    onClick={() => document.getElementById("image-upload")?.click()}
-    >
+    <div className="m-3 flex flex-col h-full justify-between">
+      {/* Form Fields */}
+      <div>
+        <div className="flex gap-4 items-center">
+            <MdOutlineArrowBack />
+            <h2 className="font-semibold text-xl">Add Category</h2>
+        </div>
         
-    <span className="text-center text-sm flex flex-col justify-center items-center"><LuImagePlus className="size-10" />Upload Maximum allowed file size is 10MB</span>
-    <input
-        type="file"
-        accept="image/*"
-        id="image-upload"
-        className="hidden"
-        onChange={(e) => {
-        if (e.target.files && e.target.files[0]) {
-            const reader = new FileReader();
-            reader.onload = () => {
-            setFormData({
-                ...formData,
-                image: reader.result as string, // Convert file to base64 string
-            });
-            };
-            reader.readAsDataURL(e.target.files[0]);
-        }
-        }}
-    />
-    </Box>
+      <div className="flex gap-5 mb-3">
+        {/* Category Name */}
+        <TextField
+          required
+          id="categoryName"
+          label="Category Name"
+          value={formData.categoryName}
+          onChange={handleInputChange}
+          fullWidth
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 4,
+            },
+          }}
+        />
 
-</Box>
+        {/* Category Sequence */}
+        <TextField
+          required
+          id="categorySequence"
+          label="Category Sequence"
+          type="number"
+          value={formData.categorySequence}
+          onChange={handleInputChange}
+          fullWidth
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 4,
+            },
+          }}
+        />
 
+        {/* Status Dropdown */}
+        <FormControl
+          fullWidth
+          sx={{
+            "& .MuiOutlinedInput-root": {
+              borderRadius: 4,
+            },
+          }}
+        >
+          <InputLabel id="status-label">Status</InputLabel>
+          <Select
+            labelId="status-label"
+            id="status"
+            value={formData.status}
+            onChange={handleStatusChange}
+            label="Status"
+          >
+            <MenuItem value="Active">Active</MenuItem>
+            <MenuItem value="Inactive">Inactive</MenuItem>
+          </Select>
+        </FormControl>
+      </div>
 
-      <Box
-        sx={{
-          gridColumn: "1 / span 3",
-          display: "flex",
-          justifyContent: "space-between",
-          marginTop: 2,
-        }}
-      >
-        <Button variant="outlined" color="secondary">
+      {/* Image Upload and Preview */}
+      <div className="flex gap-3">
+        <Box
+          component="img"
+          src={formData.image || "https://via.placeholder.com/100"}
+          alt="Uploaded"
+          sx={{
+            width: 100,
+            height: 100,
+            objectFit: "cover",
+            borderRadius: 1,
+          }}
+        />
+        <Box
+          className="w-52 h-24 border-2 border-dashed border-gray-400 flex items-center justify-center rounded-[10px] cursor-pointer relative"
+          onClick={() => document.getElementById("image-upload")?.click()}
+        >
+          <span className="text-center text-sm flex flex-col justify-center items-center">
+            <LuImagePlus className="size-10" />
+            Upload Maximum allowed file size is 10MB
+          </span>
+          <input
+            type="file"
+            accept="image/*"
+            id="image-upload"
+            className="hidden"
+            onChange={(e) => {
+              if (e.target.files && e.target.files[0]) {
+                const reader = new FileReader();
+                reader.onload = () => {
+                  setFormData({
+                    ...formData,
+                    image: reader.result as string, // Convert file to base64 string
+                  });
+                };
+                reader.readAsDataURL(e.target.files[0]);
+              }
+            }}
+          />
+        </Box>
+      </div>
+      </div>
+
+      {/* Buttons */}
+      <div className="flex justify-end space-x-4 mt-4">
+        <button
+          className="px-4 py-2 border border-gray-500 text-gray-500 rounded hover:bg-gray-100"
+          onClick={(e) => {
+            e.preventDefault();
+            console.log("Cancel");
+          }}
+        >
           Cancel
-        </Button>
-        <Button variant="contained" color="primary" onClick={handleSave}>
+        </button>
+        <button
+          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+          onClick={(e) => {
+            e.preventDefault();
+            handleSave();
+          }}
+        >
           Save
-        </Button>
-      </Box>
-    </Box>
+        </button>
+      </div>
+    </div>
   );
 };
 
