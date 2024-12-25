@@ -18,6 +18,7 @@ const Dashboard = () => {
 
     const activeTab = useAppSelector((state) => state.tabAndFormReducer.activeTab);
     const openForm = useAppSelector((state) => state.tabAndFormReducer.openForm);
+    const editCategoryId = useAppSelector((state) => state.tabAndFormReducer.editCategoryId);
 
     useEffect(() => {
         dispatch(fetchCategories());
@@ -30,11 +31,11 @@ const Dashboard = () => {
                 <Sidebar />
                 <div className="flex-1 overflow-auto">
                     { (activeTab === "Dashboard" && !openForm) && <AdminView /> }
-                    { (activeTab === "Category" && !openForm) && <Category /> }
+                    { (activeTab === "Category" && !openForm && !editCategoryId) && <Category /> }
                     { (activeTab === "Subcategory" && !openForm) && <Subcategory /> }
                     { (activeTab === "Products" && !openForm) && <Products /> }
 
-                    { (openForm === "Add Category" && activeTab === "Category") && <CategoryForm />}
+                    { ((openForm === "Add Category" && activeTab === "Category") || (editCategoryId && activeTab === "Category")) && <CategoryForm />}
                     { (openForm === "Add Subcategory" && activeTab === "Subcategory") && <SubcategoryForm /> }
                     { (openForm === "Add Products" && activeTab === "Products") && <ProductForm /> }
                 </div>

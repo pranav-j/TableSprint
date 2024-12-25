@@ -151,23 +151,13 @@ export const createCategory = createAsyncThunk<Category, Omit<Category, "id">>(
     }
 );
 
-// Updated editCategory thunk to accept FormData and categoryId
-export const editCategory = createAsyncThunk<
-    Category,
-    { formData: FormData; categoryId: number }
->("categories/editCategory", async ({ formData, categoryId }) => {
-    const response = await axios.put(
-        `${process.env.NEXT_PUBLIC_BASE_URL}/api/category/${categoryId}`,
-        formData,
-        {
-            withCredentials: true,
-            headers: {
-                'Content-Type': 'multipart/form-data',
-            },
-        }
-    );
-    return response.data.category;
-});
+export const editCategory = createAsyncThunk<Category, { formData: Omit<Category, "id">; categoryId: number | null }>(
+        "categories/editCategory", async ({ formData, categoryId }) => {
+        const response = await axios.put(
+            `http://localhost:3000/api/category/${categoryId}`, formData, { withCredentials: true });
+        return response.data.category;
+    }
+);
 
 export const deleteCategory = createAsyncThunk<number, number>(
     "categories/deleteCategory", 

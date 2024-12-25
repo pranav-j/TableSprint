@@ -83,6 +83,9 @@ router.get("/categories", authMiddleware, async (req, res) => {
     try {
       const categoryId = req.params.id;
       const { categoryName, sequence, status, image } = req.body;
+
+      console.log("cat UPDATION====================", { categoryName, sequence, status });
+      
       
       // First, check if the category exists and belongs to the user
       const existingCategory = await Category.findOne({

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import { MdOutlineArrowBack } from "react-icons/md";
-import { useAppDispatch } from "../redux/reduxHooks";
-import { resetOpenForm } from "../redux/tabAndFormSlice";
-import { createCategory } from "../redux/categorySlice";
+import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
+import { resetEditCategoryId, resetOpenForm } from "../redux/tabAndFormSlice";
+import { createCategory, editCategory } from "../redux/categorySlice";
 
 import {
   TextField,
@@ -16,12 +16,24 @@ import {
 } from "@mui/material";
 
 const CategoryForm = () => {
+  const editCategoryId = useAppSelector((state) => state.tabAndFormReducer.editCategoryId);
+  const categories = useAppSelector((state) => state.categoryReducer.categories);
+
+  let categoryToEdit;
+  if(editCategoryId) {
+    categoryToEdit = categories.find((category) => category.id === editCategoryId);
+    console.log({ categoryToEdit });
+    
+  }
+
   const [formData, setFormData] = useState({
-    categoryName: "",
-    sequence: 0,
-    status: "Active",
+    categoryName: categoryToEdit ? categoryToEdit.categoryName : "",
+    sequence: categoryToEdit ? categoryToEdit.sequence : 0,
+    status: categoryToEdit ? categoryToEdit.status : "Active",
     image: "",
   });
+
+
 
   const dispatch = useAppDispatch();
 
@@ -44,18 +56,48 @@ const CategoryForm = () => {
   const handleSave = async () => {
     console.log("Form Data:", formData);
   
-    // Dispatch createCategory thunk
     try {
-      await dispatch(createCategory(formData));
+      if(!editCategoryId) {
+        await dispatch(createCategory(formData));
+      }
+      dispatch(editCategory({formData, categoryId: editCategoryId}));
       console.log("Category added successfully!");
       dispatch(resetOpenForm());
+      dispatch(resetEditCategoryId());
     } catch (error) {
       console.error("Error adding category:", error);
     }
   };
 
+  // const handleSave = async () => {
+  //   console.log("Form Data:", formData);
+  
+  //   try {
+  //     if (!editCategoryId) {
+  //       await dispatch(createCategory(formData));
+  //     } else {
+  //       // No need to create FormData since we're sending a plain object
+  //       await dispatch(editCategory({
+  //         formData: {
+  //           categoryName: formData.categoryName,
+  //           sequence: formData.sequence,
+  //           status: formData.status,
+  //           image: formData.image
+  //         }, 
+  //         categoryId: editCategoryId
+  //       }));
+  //     }
+  //     console.log("Category saved successfully!");
+  //     dispatch(resetOpenForm());
+  //     dispatch(resetEditCategoryId());
+  //   } catch (error) {
+  //     console.error("Error saving category:", error);
+  //   }
+  // };
+
   const handleCancel = () => {
     dispatch(resetOpenForm());
+    dispatch(resetEditCategoryId());
   }
 
   return (
@@ -128,7 +170,7 @@ const CategoryForm = () => {
       <div className="flex gap-3">
         <Box
           component="img"
-          src={formData.image || "https://via.placeholder.com/100"}
+          src={formData.image || categoryToEdit?.image || "https://via.placeholder.com/100"}
           alt="Uploaded"
           sx={{
             width: 100,

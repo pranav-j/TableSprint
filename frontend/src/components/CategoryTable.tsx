@@ -18,6 +18,7 @@ import {
   Category,
 } from "../redux/categorySlice.js";
 import { RootState } from "../redux/store";
+import { setEditCategoryId } from "../redux/tabAndFormSlice.js";
 
 const columnHelper = createColumnHelper<Category>();
 
@@ -37,8 +38,7 @@ const CategoryTable = () => {
   }, [fetchCategoriesStatus, dispatch]);
 
   const handleEdit = (id: number) => {
-    console.log("Edit clicked for ID:", id);
-    // You can trigger a modal or navigate to an edit page
+    dispatch(setEditCategoryId(id));
   };
 
   // const handleDelete = (id: number) => {
