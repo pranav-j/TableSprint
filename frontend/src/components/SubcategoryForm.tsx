@@ -14,6 +14,7 @@ import {
   Box,
   SelectChangeEvent,
 } from "@mui/material";
+import axios from "axios";
 
 const SubcategoryForm = () => {
   const [formData, setFormData] = useState({
@@ -27,9 +28,9 @@ const SubcategoryForm = () => {
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categoryReducer.categories);
 
-  useEffect(() => {
-    dispatch(fetchCategories());
-  }, [dispatch]);
+//   useEffect(() => {
+//     dispatch(fetchCategories());
+//   }, [dispatch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -50,6 +51,7 @@ const SubcategoryForm = () => {
   const handleSave = async () => {
     console.log("Form Data:", formData);
     // Add your subcategory creation logic here
+    const response = await axios.post(`http://localhost:3000/api/subcategory`, formData, { withCredentials: true });
     dispatch(resetOpenForm());
   };
 
