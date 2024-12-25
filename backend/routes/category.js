@@ -2,6 +2,7 @@ const express = require("express");
 const authMiddleware = require("../middleware/authMiddleware");
 const Category = require("../models/category.js");
 const { uploadFileToS3 } = require("../utils/s3Utils"); 
+const { Op } = require("sequelize");
 const router = express.Router();
 
 router.post("/category", authMiddleware, async (req, res) => {
@@ -184,6 +185,50 @@ router.get("/categories", authMiddleware, async (req, res) => {
     }
   });
 
+  router.get("/categories/search", authMiddleware, async (req, res) => {
+    try {
+      const { query } = req.query;
 
+      console.log("query======================", query);
+      
+      
+      const searchConditions = {
+        userId: req.user.dataValues.id,
+        [Op.or]: [
+          {
+            categoryName: {
+              [Op.iLike]: `%${query}%`
+            }
+          },
+          {
+            status: {
+              [Op.iLike]: `%${query}%`
+            }
+          }
+        ]
+      };
+  
+      const categories = await Category.findAll({
+        where: searchConditions,
+        attributes: ["id", "categoryName", "categorySequence", "image", "status"],
+        order: [["categorySequence", "ASC"]]
+      });
+  
+      res.status(200).json({
+        message: "Categories searched successfully",
+        categories: categories.map(category => ({
+          id: category.id,
+          categoryName: category.categoryName,
+          sequence: category.categorySequence,
+          image: category.image,
+          status: category.status
+        }))
+      });
+  
+    } catch (error) {
+      console.error("Error searching categories:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
 
 module.exports = router;

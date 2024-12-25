@@ -1,7 +1,11 @@
 import Edit from "../assets/edit.svg";
 import Delete from "../assets/delete.svg";
 import imagePlaceholder from "../assets/image.png";
-
+import { setDeleteId, setEditCategoryId } from "../redux/tabAndFormSlice.js";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { FaSort } from "react-icons/fa";
+import { useAppDispatch, useAppSelector } from "../redux/reduxHooks.js";
 import {
   createColumnHelper,
   flexRender,
@@ -10,23 +14,43 @@ import {
   useReactTable,
   SortingState,
 } from "@tanstack/react-table";
-import { useState, useEffect } from "react";
-import { FaSort } from "react-icons/fa";
-import { useAppDispatch, useAppSelector } from "../redux/reduxHooks.js";
+
 import {
   fetchCategories,
   Category,
 } from "../redux/categorySlice.js";
-import { RootState } from "../redux/store";
-import { setDeleteId, setEditCategoryId } from "../redux/tabAndFormSlice.js";
+
 
 const columnHelper = createColumnHelper<Category>();
 
 const CategoryTable = () => {
-  // const dispatch = useDispatch();
   const dispatch = useAppDispatch();
+  const searchParam = useAppSelector((state) => state.tabAndFormReducer.searchParam);
+  const [ searchResults, setSearchResults ] = useState([]);
+  useEffect(() => {
+    if (searchParam?.trim() !== "") {
+      const fetchSearchResults = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/categories/search`,
+            {
+              params: { query: searchParam },
+              withCredentials: true,
+            }
+          );
+          setSearchResults(response.data.categories)
+          console.log("Search Results:", response.data.categories);
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+        }
+      };
+
+      fetchSearchResults();
+    }
+  }, [searchParam]);
+
   const { categories, fetchCategoriesStatus, error } = useAppSelector(
-    (state: RootState) => state.categoryReducer
+    (state) => state.categoryReducer
   );
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -109,7 +133,7 @@ const CategoryTable = () => {
   ];
 
   const table = useReactTable({
-    data: categories,
+    data: searchParam ? searchResults : categories,
     columns,
     state: {
       sorting,
