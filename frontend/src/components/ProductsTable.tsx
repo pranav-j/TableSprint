@@ -1,5 +1,6 @@
 import Edit from "../assets/edit.svg";
 import Delete from "../assets/delete.svg";
+import imagePlaceholder from "../assets/image.png";
 
 import {
   createColumnHelper,
@@ -12,9 +13,9 @@ import {
 import { useState, useEffect } from "react";
 import { FaSort } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
-import { fetchProducts, deleteProduct, Product } from "../redux/productSlice";
+import { fetchProducts, Product } from "../redux/productSlice";
 import { RootState } from "../redux/store";
-import { setEditProductId } from "../redux/tabAndFormSlice";
+import { setDeleteId, setEditProductId } from "../redux/tabAndFormSlice";
 
 const columnHelper = createColumnHelper<Product>();
 
@@ -38,7 +39,7 @@ const ProductTable = () => {
   };
 
   const handleDelete = (id: number) => {
-    dispatch(deleteProduct(id));
+    dispatch(setDeleteId(id));
   };
 
   const columns = [
@@ -59,15 +60,21 @@ const ProductTable = () => {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("image", {
-      header: "Image",
-      cell: (info) => (
-        <img
-          src={info.getValue()}
-          alt={info.row.original.productName}
-          className="h-10 w-10 object-cover rounded mx-auto"
-        />
-      ),
-    }),
+        header: "Image",
+        cell: (info) => {
+          const imageUrl = info.getValue();
+          return (
+            <img
+              src={imageUrl && imageUrl !== "" ? imageUrl : imagePlaceholder}
+              alt={info.row.original.categoryName}
+              className="h-10 w-10 object-cover rounded mx-auto"
+              onError={(e) => {
+                e.currentTarget.src = imagePlaceholder;
+              }}
+            />
+          );
+        },
+      }),
     columnHelper.accessor("status", {
       header: "Status",
       cell: (info) => (

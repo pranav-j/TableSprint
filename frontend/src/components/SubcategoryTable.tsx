@@ -1,5 +1,6 @@
 import Edit from "../assets/edit.svg";
 import Delete from "../assets/delete.svg";
+import imagePlaceholder from "../assets/image.png";
 
 import {
   createColumnHelper,
@@ -14,11 +15,9 @@ import { FaSort } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import {
   fetchSubcategories,
-  deleteSubcategory,
   Subcategory,
 } from "../redux/subcategorySlice";
-// import { RootState } from "../redux/store";
-import { setEditSubCategoryId } from "../redux/tabAndFormSlice";
+import { setDeleteId, setEditSubCategoryId } from "../redux/tabAndFormSlice";
 
 const columnHelper = createColumnHelper<Subcategory>();
 
@@ -46,7 +45,7 @@ const SubcategoryTable = () => {
   };
 
   const handleDelete = (id: number) => {
-    dispatch(deleteSubcategory(id));
+    dispatch(setDeleteId(id));
   };
 
   const columns = [
@@ -63,15 +62,21 @@ const SubcategoryTable = () => {
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("image", {
-      header: "Image",
-      cell: (info) => (
-        <img
-          src={info.getValue()}
-          alt={info.row.original.subcategoryName}
-          className="h-10 w-10 object-cover rounded mx-auto"
-        />
-      ),
-    }),
+        header: "Image",
+        cell: (info) => {
+          const imageUrl = info.getValue();
+          return (
+            <img
+              src={imageUrl && imageUrl !== "" ? imageUrl : imagePlaceholder}
+              alt={info.row.original.categoryName}
+              className="h-10 w-10 object-cover rounded mx-auto"
+              onError={(e) => {
+                e.currentTarget.src = imagePlaceholder;
+              }}
+            />
+          );
+        },
+      }),
     columnHelper.accessor("status", {
       header: "Status",
       cell: (info) => (

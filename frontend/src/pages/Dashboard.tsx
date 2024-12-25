@@ -1,4 +1,4 @@
-import CategoryForm from "../components/AddOrEditCategory";
+import CategoryForm from "../components/CategoryForm";
 import SubcategoryForm from "../components/SubcategoryForm";
 import ProductForm from "../components/ProductForm";
 import AdminView from "../components/AdminView";
@@ -7,6 +7,7 @@ import Subcategory from "../components/Subcategory";
 import Products from "../components/Products";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
+import DeleteModal from "../components/DeleteModal";
 import { useAppSelector, useAppDispatch } from "../redux/reduxHooks";
 import { fetchCategories } from "../redux/categorySlice";
 import { fetchSubcategories } from "../redux/subcategorySlice";
@@ -40,6 +41,7 @@ const Dashboard = () => {
                     { ((openForm === "Add Category" && activeTab === "Category") || (editCategoryId && activeTab === "Category")) && <CategoryForm />}
                     { ((openForm === "Add Subcategory" && activeTab === "Subcategory") || (editSubCategoryId && activeTab === "Subcategory")) && <SubcategoryForm /> }
                     { ((openForm === "Add Products" && activeTab === "Products") || (editProductId && activeTab === "Products")) && <ProductForm /> }
+                    <DeleteModal />
                 </div>
             </div>
             

@@ -1,5 +1,6 @@
 import Edit from "../assets/edit.svg";
 import Delete from "../assets/delete.svg";
+import imagePlaceholder from "../assets/image.png";
 
 import {
   createColumnHelper,
@@ -14,11 +15,10 @@ import { FaSort } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks.js";
 import {
   fetchCategories,
-  deleteCategory,
   Category,
 } from "../redux/categorySlice.js";
 import { RootState } from "../redux/store";
-import { setEditCategoryId } from "../redux/tabAndFormSlice.js";
+import { setDeleteId, setEditCategoryId } from "../redux/tabAndFormSlice.js";
 
 const columnHelper = createColumnHelper<Category>();
 
@@ -41,9 +41,9 @@ const CategoryTable = () => {
     dispatch(setEditCategoryId(id));
   };
 
-  // const handleDelete = (id: number) => {
-  //   dispatch(deleteCategory(id));
-  // };
+  const handleDelete = (id: number) => {
+    dispatch(setDeleteId(id));
+  };
 
   const columns = [
     columnHelper.accessor("id", {
@@ -56,13 +56,19 @@ const CategoryTable = () => {
     }),
     columnHelper.accessor("image", {
       header: "Image",
-      cell: (info) => (
-        <img
-          src={info.getValue()}
-          alt={info.row.original.categoryName}
-          className="h-10 w-10 object-cover rounded mx-auto"
-        />
-      ),
+      cell: (info) => {
+        const imageUrl = info.getValue();
+        return (
+          <img
+            src={imageUrl && imageUrl !== "" ? imageUrl : imagePlaceholder}
+            alt={info.row.original.categoryName}
+            className="h-10 w-10 object-cover rounded mx-auto"
+            onError={(e) => {
+              e.currentTarget.src = imagePlaceholder;
+            }}
+          />
+        );
+      },
     }),
     columnHelper.accessor("status", {
       header: "Status",
@@ -93,7 +99,7 @@ const CategoryTable = () => {
           </button>
           <button
             className="p-1 hover:bg-gray-100 rounded"
-            // onClick={() => handleDelete(row.original.id)}
+            onClick={() => handleDelete(row.original.id)}
           >
             <img src={Delete} alt="Delete" />
           </button>

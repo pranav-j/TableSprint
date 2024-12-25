@@ -84,7 +84,7 @@ const SubcategoryForm = () => {
 
   return (
     <div className="p-3 h-full">
-      <div className="flex flex-col h-full shadow-lg p-6 justify-between">
+      <div className="flex flex-col h-full shadow-xl rounded-lg p-6 justify-between">
         <div>
           <div className="flex gap-4 items-center">
             <MdOutlineArrowBack />
@@ -94,7 +94,6 @@ const SubcategoryForm = () => {
           </div>
 
           <div className="flex gap-5 mb-3">
-            {/* Category Dropdown */}
             <FormControl
               fullWidth
               sx={{
@@ -119,7 +118,6 @@ const SubcategoryForm = () => {
               </Select>
             </FormControl>
 
-            {/* Subcategory Name */}
             <TextField
               required
               id="subcategoryName"
@@ -134,7 +132,6 @@ const SubcategoryForm = () => {
               }}
             />
 
-            {/* Sequence */}
             <TextField
               required
               id="sequence"
@@ -151,7 +148,6 @@ const SubcategoryForm = () => {
             />
           </div>
 
-          {/* Image Upload and Preview */}
           <div className="flex gap-3">
             <Box
               component="img"

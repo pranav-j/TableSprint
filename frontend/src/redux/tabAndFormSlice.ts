@@ -6,6 +6,7 @@ interface TabAndFormState {
     editCategoryId: number | null;
     editSubCategoryId: number | null;
     editProductId: number | null;
+    deleteId: number | null;
 };
 
 const initialState: TabAndFormState = {
@@ -14,6 +15,7 @@ const initialState: TabAndFormState = {
     editCategoryId: null,
     editSubCategoryId: null,
     editProductId: null,
+    deleteId: null,
 };
 
 const tabAndFormSlice = createSlice({
@@ -46,6 +48,12 @@ const tabAndFormSlice = createSlice({
         },
         resetEditProductId: (state) => {
             state.editProductId = null;
+        },
+        setDeleteId: (state, action: PayloadAction<number>) => {
+            state.deleteId = action.payload;
+        },
+        resetDeleteId: (state) => {
+            state.deleteId = null;
         }
     }
 });
@@ -60,5 +68,7 @@ export const {
     resetEditSubCategoryId,
     setEditProductId,
     resetEditProductId,
+    setDeleteId,
+    resetDeleteId
 } = tabAndFormSlice.actions;
 export default tabAndFormSlice.reducer;

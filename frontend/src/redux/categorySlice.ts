@@ -54,7 +54,7 @@ export const editCategory = createAsyncThunk<Category, { formData: Omit<Category
 export const deleteCategory = createAsyncThunk<number, number>(
     "categories/deleteCategory", 
     async (categoryId) => {
-        await axios.delete(`${process.env.NEXT_PUBLIC_BASE_URL}/api/category/${categoryId}`, { withCredentials: true });
+        await axios.delete(`http://localhost:3000/api/category/${categoryId}`, { withCredentials: true });
         return categoryId;
     }
 );

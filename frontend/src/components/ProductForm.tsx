@@ -47,13 +47,6 @@ const ProductForm = () => {
     image: "",
   });
 
-
-
-//   const [selectedCategoryName, setSelectedCategoryName] = useState("");
-
-//   const filteredSubcategories = subcategories.filter(
-//     (subcat) => subcat.categoryName === selectedCategoryName
-//   );
   const filteredSubcategories = subcategories.filter((subcat) => {
     if (formData.categoryId) {
       const selectedCategory = categories.find(
@@ -74,13 +67,6 @@ const ProductForm = () => {
 
   const handleCategoryChange = (event: SelectChangeEvent<string>) => {
     const selectedId = event.target.value;
-    // const selectedCategory = categories.find(
-    //   (category) => category.id === Number(selectedId)
-    // );
-
-    // if (selectedCategory) {
-    //   setSelectedCategoryName(selectedCategory.categoryName);
-    // }
 
     setFormData({
       ...formData,
@@ -101,7 +87,7 @@ const ProductForm = () => {
       if(!editProductId) {
         dispatch(createProduct(formData));
       }
-      dispatch(editProduct({formData, productId: editProductId}))
+      dispatch(editProduct({formData, productId: editProductId}));
       console.log(formData);
 
       dispatch(resetOpenForm());
@@ -118,7 +104,7 @@ const ProductForm = () => {
 
   return (
     <div className="p-3 h-full">
-      <div className="flex flex-col h-full shadow-lg p-6 justify-between">
+      <div className="flex flex-col h-full shadow-xl rounded-lg p-6 justify-between">
         <div>
           <div className="flex gap-4 items-center mb-6">
             <MdOutlineArrowBack

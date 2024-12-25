@@ -79,7 +79,7 @@ const CategoryForm = () => {
 
   return (
     <div className="p-3 h-full">
-      <div className="flex flex-col h-full shadow-lg p-6 justify-between">
+      <div className="flex flex-col h-full shadow-xl rounded-lg p-6 justify-between">
         <div>
           <div className="flex gap-4 items-center">
             <MdOutlineArrowBack />
