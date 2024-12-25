@@ -11,43 +11,50 @@ import {
 } from "@tanstack/react-table";
 import { useState, useEffect } from "react";
 import { FaSort } from "react-icons/fa";
-import { useAppDispatch, useAppSelector } from "../redux/reduxHooks.js";
+import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import {
-  fetchCategories,
-  deleteCategory,
-  Category,
-} from "../redux/categorySlice.js";
+  fetchSubcategories,
+  deleteSubcategory,
+  Subcategory,
+} from "../redux/subcategorySlice";
 import { RootState } from "../redux/store";
 
-const columnHelper = createColumnHelper<Category>();
+const columnHelper = createColumnHelper<Subcategory>();
 
-const CategoryTable = () => {
-  // const dispatch = useDispatch();
-  const dispatch = useAppDispatch()
-  const { categories, fetchCategoriesStatus, error } = useAppSelector(
-    (state: RootState) => state.categoryReducer
+const SubcategoryTable = () => {
+  const dispatch = useAppDispatch();
+  const { subcategories, fetchSubcategoriesStatus, createSubcategoryStatus, error } = useAppSelector(
+    (state: RootState) => state.subcategoryReducer
   );
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
   useEffect(() => {
-    if (fetchCategoriesStatus === "idle") {
-      dispatch(fetchCategories());
+    if (fetchSubcategoriesStatus === "idle") {
+      dispatch(fetchSubcategories());
     }
-  }, [fetchCategoriesStatus, dispatch]);
+  }, [fetchSubcategoriesStatus, dispatch, createSubcategoryStatus]);
+
+  useEffect(() => {
+    dispatch(fetchSubcategories());
+  }, [createSubcategoryStatus])
 
   const handleEdit = (id: number) => {
     console.log("Edit clicked for ID:", id);
     // You can trigger a modal or navigate to an edit page
   };
 
-  // const handleDelete = (id: number) => {
-  //   dispatch(deleteCategory(id));
-  // };
+  const handleDelete = (id: number) => {
+    dispatch(deleteSubcategory(id));
+  };
 
   const columns = [
     columnHelper.accessor("id", {
       header: "Id",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("subcategoryName", {
+      header: "Subcategory name",
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("categoryName", {
@@ -59,7 +66,7 @@ const CategoryTable = () => {
       cell: (info) => (
         <img
           src={info.getValue()}
-          alt={info.row.original.categoryName}
+          alt={info.row.original.subcategoryName}
           className="h-10 w-10 object-cover rounded mx-auto"
         />
       ),
@@ -93,7 +100,7 @@ const CategoryTable = () => {
           </button>
           <button
             className="p-1 hover:bg-gray-100 rounded"
-            // onClick={() => handleDelete(row.original.id)}
+            onClick={() => handleDelete(row.original.id)}
           >
             <img src={Delete} alt="Delete" />
           </button>
@@ -103,7 +110,7 @@ const CategoryTable = () => {
   ];
 
   const table = useReactTable({
-    data: categories,
+    data: subcategories,
     columns,
     state: {
       sorting,
@@ -113,11 +120,11 @@ const CategoryTable = () => {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  if (fetchCategoriesStatus === "pending") {
+  if (fetchSubcategoriesStatus === "pending") {
     return <p>Loading...</p>;
   }
 
-  if (fetchCategoriesStatus === "rejected") {
+  if (fetchSubcategoriesStatus === "rejected") {
     return <p>Error: {error}</p>;
   }
 
@@ -172,4 +179,4 @@ const CategoryTable = () => {
   );
 };
 
-export default CategoryTable;
+export default SubcategoryTable;

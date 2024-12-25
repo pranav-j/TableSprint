@@ -5,14 +5,22 @@ import Category from "../components/Category";
 import Subcategory from "../components/Subcategory";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
-import { useAppSelector } from "../redux/reduxHooks";
+import { useAppSelector, useAppDispatch } from "../redux/reduxHooks";
+import { fetchCategories } from "../redux/categorySlice";
+import { fetchSubcategories } from "../redux/subcategorySlice";
+import { useEffect } from "react";
 
 
 const Dashboard = () => {
+    const dispatch = useAppDispatch();
 
     const activeTab = useAppSelector((state) => state.tabAndFormReducer.activeTab);
     const openForm = useAppSelector((state) => state.tabAndFormReducer.openForm);
 
+    useEffect(() => {
+        dispatch(fetchCategories());
+        dispatch(fetchSubcategories());
+    }, [])
     return(
         <div className="flex flex-col h-screen overflow-hidden">
             <Header />

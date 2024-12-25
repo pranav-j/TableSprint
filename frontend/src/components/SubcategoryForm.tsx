@@ -3,7 +3,6 @@ import { LuImagePlus } from "react-icons/lu";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import { resetOpenForm } from "../redux/tabAndFormSlice";
-import { fetchCategories } from "../redux/categorySlice";
 
 import {
   TextField,
@@ -21,16 +20,11 @@ const SubcategoryForm = () => {
     categoryId: "",
     subcategoryName: "",
     sequence: 0,
-    // status: "Active",
     image: "",
   });
 
   const dispatch = useAppDispatch();
   const categories = useAppSelector((state) => state.categoryReducer.categories);
-
-//   useEffect(() => {
-//     dispatch(fetchCategories());
-//   }, [dispatch]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;

@@ -1,11 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import tabAndFormReducer from "./tabAndFormSlice";
-import categoryReducer from "./categorySlice"
+import categoryReducer from "./categorySlice";
+import subcategoryReducer from "./subcategorySlice";
 
 const store = configureStore({
     reducer: {
         tabAndFormReducer,
         categoryReducer,
+        subcategoryReducer,
     }
 })
 
