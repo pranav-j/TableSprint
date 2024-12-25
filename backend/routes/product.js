@@ -4,6 +4,7 @@ const Product = require("../models/product.js");
 const Category = require("../models/category.js");
 const Subcategory = require("../models/subcategory.js");
 const { uploadFileToS3 } = require("../utils/s3Utils");
+const { Op } = require("sequelize");
 const router = express.Router();
 
 
@@ -276,5 +277,65 @@ router.put("/product/:id", authMiddleware, async (req, res) => {
       res.status(500).json({ message: "Internal server error" });
     }
   });
+
+
+
+  router.get("/products/search", authMiddleware, async (req, res) => {
+    try {
+      const { query } = req.query;
+      const userId = req.user.dataValues.id;
+  
+      const searchConditions = {
+        userId,
+        [Op.or]: [
+          {
+            productName: {
+              [Op.iLike]: `%${query}%`
+            }
+          },
+          {
+            status: {
+              [Op.iLike]: `%${query}%`
+            }
+          }
+        ]
+      };
+  
+      const products = await Product.findAll({
+        where: searchConditions,
+        include: [
+          {
+            model: Category,
+            attributes: ["categoryName"],
+            where: { userId }
+          },
+          {
+            model: Subcategory,
+            attributes: ["subcategoryName"],
+            where: { userId }
+          }
+        ],
+        attributes: ["id", "productName", "image", "status"],
+        order: [["productName", "ASC"]]
+      });
+  
+      res.status(200).json({
+        message: "Products searched successfully",
+        products: products.map(product => ({
+          id: product.id,
+          productName: product.productName,
+          categoryName: product.Category.categoryName,
+          subcategoryName: product.Subcategory.subcategoryName,
+          image: product.image,
+          status: product.status
+        }))
+      });
+  
+    } catch (error) {
+      console.error("Error searching products:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
 
 module.exports = router;

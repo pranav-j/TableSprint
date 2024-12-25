@@ -1,7 +1,13 @@
 import Edit from "../assets/edit.svg";
 import Delete from "../assets/delete.svg";
 import imagePlaceholder from "../assets/image.png";
-
+import { useState, useEffect } from "react";
+import { FaSort } from "react-icons/fa";
+import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
+import { fetchProducts, Product } from "../redux/productSlice";
+import { RootState } from "../redux/store";
+import { setDeleteId, setEditProductId } from "../redux/tabAndFormSlice";
+import axios from "axios";
 import {
   createColumnHelper,
   flexRender,
@@ -10,21 +16,40 @@ import {
   useReactTable,
   SortingState,
 } from "@tanstack/react-table";
-import { useState, useEffect } from "react";
-import { FaSort } from "react-icons/fa";
-import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
-import { fetchProducts, Product } from "../redux/productSlice";
-import { RootState } from "../redux/store";
-import { setDeleteId, setEditProductId } from "../redux/tabAndFormSlice";
+
 
 const columnHelper = createColumnHelper<Product>();
 
 const ProductTable = () => {
   const dispatch = useAppDispatch();
+  const searchParam = useAppSelector((state) => state.tabAndFormReducer.searchParam);
+  const [ searchResults, setSearchResults ] = useState([]);
   const { products, fetchProductsStatus, createProductStatus, error } =
-    useAppSelector((state: RootState) => state.productReducer);
+  useAppSelector((state: RootState) => state.productReducer);
 
   const [sorting, setSorting] = useState<SortingState>([]);
+
+  useEffect(() => {
+    if (searchParam?.trim() !== "") {
+      const fetchSearchResults = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/products/search`,
+            {
+              params: { query: searchParam },
+              withCredentials: true,
+            }
+          );
+          setSearchResults(response.data.products)
+          console.log("Search Results:", response.data.products);
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+        }
+      };
+
+      fetchSearchResults();
+    }
+  }, [searchParam]);
 
   useEffect(() => {
     if (fetchProductsStatus === "idle") {
@@ -110,7 +135,7 @@ const ProductTable = () => {
   ];
 
   const table = useReactTable({
-    data: products,
+    data: searchParam ? searchResults : products,
     columns,
     state: {
       sorting,

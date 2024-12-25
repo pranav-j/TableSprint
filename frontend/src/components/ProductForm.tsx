@@ -108,7 +108,7 @@ const ProductForm = () => {
         <div>
           <div className="flex gap-4 items-center mb-6">
             <MdOutlineArrowBack
-              className="cursor-pointer"
+              className="cursor-pointer text-gray-400"
               onClick={handleCancel}
             />
             <h2 className="font-semibold text-xl">Add Product</h2>
@@ -227,13 +227,13 @@ const ProductForm = () => {
 
         <div className="flex justify-end gap-4 mt-6">
           <button
-            className="px-6 py-2 border border-gray-300 rounded-lg text-gray-600 hover:bg-gray-50"
+            className="px-12 py-2 border border-gray-300 rounded-full text-gray-600 hover:bg-gray-50"
             onClick={handleCancel}
           >
             Cancel
           </button>
           <button
-            className="px-6 py-2 bg-purple-600 text-white rounded-lg hover:bg-purple-700"
+            className="px-14 py-2 bg-[#662671] text-white rounded-full hover:bg-purple-700"
             onClick={handleSave}
             disabled={
               !formData.categoryId ||

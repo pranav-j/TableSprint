@@ -3,6 +3,7 @@ const authMiddleware = require("../middleware/authMiddleware");
 const Subcategory = require("../models/subcategory.js");
 const Category = require("../models/category.js");
 const { uploadFileToS3 } = require("../utils/s3Utils");
+const { Op } = require("sequelize");
 const router = express.Router();
 
 
@@ -10,7 +11,6 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
     try {
       const userId = req.user.dataValues.id;
   
-      // Fetch subcategories for the user directly
       const subcategories = await Subcategory.findAll({
         where: { userId },
         include: [{
@@ -29,7 +29,7 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
           categoryName: sub.Category.categoryName,
           sequence: sub.sequence,
           image: sub.image,
-          status: sub.Category.status // Use category's status
+          status: sub.Category.status
         })),
       });
     } catch (error) {
@@ -38,7 +38,6 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
     }
   });
   
-  // Create subcategory
   router.post("/subcategory", authMiddleware, async (req, res) => {
     try {
       const { categoryId, subcategoryName, sequence, image } = req.body;
@@ -77,7 +76,6 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
         userId,
       });
   
-      // Return simplified response with category's status
       res.status(201).json({
         message: "Subcategory created successfully",
         subcategory: {
@@ -86,7 +84,7 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
           categoryName: category.categoryName,
           sequence: subcategory.sequence,
           image: subcategory.image,
-          status: category.status // Use category's status
+          status: category.status
         },
       });
     } catch (error) {
@@ -102,7 +100,6 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
       const { categoryId, subcategoryName, sequence, image } = req.body;
       const userId = req.user.dataValues.id;
   
-      // First, check if the subcategory exists and belongs to the user
       const existingSubcategory = await Subcategory.findOne({
         where: {
           id: subcategoryId,
@@ -118,7 +115,6 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
         return res.status(404).json({ message: "Subcategory not found or unauthorized" });
       }
   
-      // Check if the category exists and belongs to the user
       if (categoryId) {
         const category = await Category.findOne({
           where: {
@@ -132,34 +128,27 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
         }
       }
   
-      // Prepare update object
       const updateData = {
         subcategoryName,
         sequence,
         categoryId: categoryId || existingSubcategory.categoryId
       };
   
-      // Handle image update if new image is provided
       if (image && image !== existingSubcategory.image) {
-        // Convert the base64 image string to a buffer
         const base64Image = image.split(";base64,").pop();
         const imageBuffer = Buffer.from(base64Image, "base64");
   
-        // Upload the new image to S3
         const s3ImageUrl = await uploadFileToS3({
           originalname: `subcategory-${subcategoryId}-${Date.now()}.jpg`,
           buffer: imageBuffer,
           mimetype: "image/jpeg"
         }, "subcategory-images");
   
-        // Add the new image URL to update data
         updateData.image = s3ImageUrl;
       }
   
-      // Update the subcategory
       await existingSubcategory.update(updateData);
   
-      // Fetch the updated subcategory to return in response
       const updatedSubcategory = await Subcategory.findOne({
         where: {
           id: subcategoryId,
@@ -190,13 +179,11 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
     }
   });
   
-  // Delete subcategory
   router.delete("/subcategory/:id", authMiddleware, async (req, res) => {
     try {
       const subcategoryId = req.params.id;
       const userId = req.user.dataValues.id;
   
-      // Check if the subcategory exists and belongs to the user
       const subcategory = await Subcategory.findOne({
         where: {
           id: subcategoryId,
@@ -210,7 +197,6 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
         });
       }
   
-      // Delete the subcategory
       await subcategory.destroy();
   
       res.status(200).json({
@@ -220,6 +206,54 @@ router.get("/subcategories", authMiddleware, async (req, res) => {
   
     } catch (error) {
       console.error("Error deleting subcategory:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+
+  router.get("/subcategories/search", authMiddleware, async (req, res) => {
+    try {
+      const { query } = req.query;
+      const userId = req.user.dataValues.id;
+  
+      console.log("Subcategory search query:", query);
+      
+      const searchConditions = {
+        userId,
+        [Op.or]: [
+          {
+            subcategoryName: {
+              [Op.iLike]: `%${query}%`
+            }
+          }
+        ]
+      };
+  
+      const subcategories = await Subcategory.findAll({
+        where: searchConditions,
+        include: [{
+          model: Category,
+          attributes: ["categoryName", "status"],
+          where: { userId }
+        }],
+        attributes: ["id", "subcategoryName", "sequence", "image", "categoryId"],
+        order: [["sequence", "ASC"]]
+      });
+  
+      res.status(200).json({
+        message: "Subcategories searched successfully",
+        subcategories: subcategories.map(subcategory => ({
+          id: subcategory.id,
+          subcategoryName: subcategory.subcategoryName,
+          categoryName: subcategory.Category.categoryName,
+          sequence: subcategory.sequence,
+          image: subcategory.image,
+          status: subcategory.Category.status
+        }))
+      });
+  
+    } catch (error) {
+      console.error("Error searching subcategories:", error);
       res.status(500).json({ message: "Internal server error" });
     }
   });

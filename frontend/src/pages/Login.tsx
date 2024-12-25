@@ -129,7 +129,7 @@ const Login = () => {
             <div className="flex items-center justify-end">
               <button
                 type="button"
-                className="text-purple-600 text-sm hover:text-purple-500"
+                className="text-[#662671] text-sm hover:text-purple-500"
               >
                 Forgot Password?
               </button>
@@ -137,7 +137,7 @@ const Login = () => {
 
             <button
               type="submit"
-              className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              className="w-full bg-[#662671] text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
             >
               Log In
             </button>

@@ -40,7 +40,6 @@ const SignupPage = () => {
       const response = await axios.post(`http://localhost:3000/api/auth/signup`, formData);
       console.log('Form submitted:', formData);
 
-      // After successful signup, navigate to dashboard
       if (response.status === 201) {
         navigate('/login');
       }
@@ -51,30 +50,25 @@ const SignupPage = () => {
   };
 
   return (
-    // Background container
     <div 
         className="min-h-screen bg-cover bg-center bg-no-repeat"
         style={{
-            backgroundImage: `url(${background})`,  // Note the url() wrapper and template literal
+            backgroundImage: `url(${background})`,
         }}
     >
-      {/* Optional overlay to ensure form readability */}
       <div className="min-h-screen bg-[#5C218B]/30 flex items-center p-20">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-          {/* Logo and Title */}
           <div className="flex flex-col items-center mb-8">
             <img className='mb-4' src={TSlogo} alt="TSlogo" />
             <h1 className="text-xl text-gray-600">Welcome to TableSprint admin</h1>
           </div>
 
-          {/* Error message */}
           {error && (
             <div className="text-red-500 text-center mb-4">
               {error}
             </div>
           )}
 
-          {/* Form */}
           <form className="space-y-6" onSubmit={handleSubmit}>
             <TextField
               required
@@ -136,7 +130,7 @@ const SignupPage = () => {
 
             <button
               type="submit"
-              className="w-full bg-purple-600 text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
+              className="w-full bg-[#662671] text-white py-2 px-4 rounded-md hover:bg-purple-700 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:ring-offset-2"
             >
               Sign Up
             </button>

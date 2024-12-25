@@ -1,7 +1,11 @@
 import Edit from "../assets/edit.svg";
 import Delete from "../assets/delete.svg";
 import imagePlaceholder from "../assets/image.png";
-
+import { setDeleteId, setEditSubCategoryId } from "../redux/tabAndFormSlice";
+import axios from "axios";
+import { useState, useEffect } from "react";
+import { FaSort } from "react-icons/fa";
+import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import {
   createColumnHelper,
   flexRender,
@@ -10,19 +14,19 @@ import {
   useReactTable,
   SortingState,
 } from "@tanstack/react-table";
-import { useState, useEffect } from "react";
-import { FaSort } from "react-icons/fa";
-import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
+
 import {
   fetchSubcategories,
   Subcategory,
 } from "../redux/subcategorySlice";
-import { setDeleteId, setEditSubCategoryId } from "../redux/tabAndFormSlice";
+
 
 const columnHelper = createColumnHelper<Subcategory>();
 
 const SubcategoryTable = () => {
   const dispatch = useAppDispatch();
+  const searchParam = useAppSelector((state) => state.tabAndFormReducer.searchParam);
+  const [ searchResults, setSearchResults ] = useState([]);
   const {
     subcategories,
     fetchSubcategoriesStatus,
@@ -31,6 +35,29 @@ const SubcategoryTable = () => {
   } = useAppSelector((state) => state.subcategoryReducer);
 
   const [sorting, setSorting] = useState<SortingState>([]);
+
+
+  useEffect(() => {
+    if (searchParam?.trim() !== "") {
+      const fetchSearchResults = async () => {
+        try {
+          const response = await axios.get(
+            `http://localhost:3000/api/subcategories/search`,
+            {
+              params: { query: searchParam },
+              withCredentials: true,
+            }
+          );
+          setSearchResults(response.data.subcategories)
+          console.log("Search Results:", response.data.subcategories);
+        } catch (error) {
+          console.error("Error fetching search results:", error);
+        }
+      };
+
+      fetchSearchResults();
+    }
+  }, [searchParam]);
 
   useEffect(() => {
     if (fetchSubcategoriesStatus === "idle") {
@@ -116,7 +143,7 @@ const SubcategoryTable = () => {
   ];
 
   const table = useReactTable({
-    data: subcategories,
+    data: searchParam ? searchResults : subcategories,
     columns,
     state: {
       sorting,

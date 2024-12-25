@@ -86,14 +86,16 @@ const SubcategoryForm = () => {
     <div className="p-3 h-full">
       <div className="flex flex-col h-full shadow-xl rounded-lg p-6 justify-between">
         <div>
-          <div className="flex gap-4 items-center">
-            <MdOutlineArrowBack />
-            <h2 className="font-semibold text-xl">
+          <div className="flex gap-4 items-center mb-6">
+            <MdOutlineArrowBack
+              className="cursor-pointer text-gray-400"
+              onClick={handleCancel}
+            />            <h2 className="font-semibold text-xl">
               {editSubCategoryId ? "Edit" : "Add"} Sub Category
             </h2>
           </div>
 
-          <div className="flex gap-5 mb-3">
+          <div className="flex gap-5 mb-6">
             <FormControl
               fullWidth
               sx={{
@@ -194,13 +196,13 @@ const SubcategoryForm = () => {
 
         <div className="flex justify-end space-x-4 mt-4">
           <button
-            className="px-4 py-2 border border-gray-500 text-gray-500 rounded hover:bg-gray-100"
+            className="px-12 py-2 border border-gray-500 text-gray-500 rounded-full hover:bg-gray-100"
             onClick={handleCancel}
           >
             Cancel
           </button>
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-14 py-2 bg-[#662671] text-white rounded-full hover:bg-purple-700"
             onClick={handleSave}
           >
             Save
