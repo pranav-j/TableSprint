@@ -1,21 +1,22 @@
 const { DataTypes, Model } = require("sequelize");
 const sequelize = require("./index");
-const User = require("../models/user.js");
+const Category = require("./category");
+const User = require("./user");
 
-class Category extends Model {}
+class Subcategory extends Model {}
 
-Category.init(
+Subcategory.init(
   {
     id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
     },
-    categoryName: {
+    subcategoryName: {
       type: DataTypes.STRING,
       allowNull: false,
     },
-    categorySequence: {
+    sequence: {
       type: DataTypes.INTEGER,
       allowNull: true,
     },
@@ -28,6 +29,14 @@ Category.init(
       type: DataTypes.STRING,
       allowNull: true,
     },
+    categoryId: {
+      type: DataTypes.INTEGER,
+      allowNull: false,
+      references: {
+        model: Category,
+        key: "id",
+      },
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -39,12 +48,14 @@ Category.init(
   },
   {
     sequelize,
-    modelName: "Category",
+    modelName: "Subcategory",
   }
 );
 
 // Define associations
-User.hasMany(Category, { foreignKey: "userId", onDelete: "CASCADE" });
-Category.belongsTo(User, { foreignKey: "userId" });
+Category.hasMany(Subcategory, { foreignKey: "categoryId", onDelete: "CASCADE" });
+Subcategory.belongsTo(Category, { foreignKey: "categoryId" });
+User.hasMany(Subcategory, { foreignKey: "userId", onDelete: "CASCADE" });
+Subcategory.belongsTo(User, { foreignKey: "userId" });
 
-module.exports = Category;
+module.exports = Subcategory;
