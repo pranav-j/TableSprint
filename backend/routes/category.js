@@ -119,14 +119,9 @@ router.get("/categories", authMiddleware, async (req, res) => {
           mimetype: "image/jpeg"
         }, "category-images");
   
-        // Add the new image URL to update data
         updateData.image = s3ImageUrl;
-  
-        // Note: You might want to delete the old image from S3 here
-        // This would require implementing a deleteFileFromS3 utility
       }
   
-      // Update the category
       await existingCategory.update(updateData);
   
       // Fetch the updated category to return in response

@@ -17,14 +17,15 @@ import {
   deleteSubcategory,
   Subcategory,
 } from "../redux/subcategorySlice";
-import { RootState } from "../redux/store";
+// import { RootState } from "../redux/store";
+import { setEditSubCategoryId } from "../redux/tabAndFormSlice";
 
 const columnHelper = createColumnHelper<Subcategory>();
 
 const SubcategoryTable = () => {
   const dispatch = useAppDispatch();
   const { subcategories, fetchSubcategoriesStatus, createSubcategoryStatus, error } = useAppSelector(
-    (state: RootState) => state.subcategoryReducer
+    (state) => state.subcategoryReducer
   );
 
   const [sorting, setSorting] = useState<SortingState>([]);
@@ -38,6 +39,7 @@ const SubcategoryTable = () => {
   const handleEdit = (id: number) => {
     console.log("Edit clicked for ID:", id);
     // You can trigger a modal or navigate to an edit page
+    dispatch(setEditSubCategoryId(id));
   };
 
   const handleDelete = (id: number) => {

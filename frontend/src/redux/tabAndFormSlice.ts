@@ -4,12 +4,14 @@ interface TabAndFormState {
     activeTab: string;
     openForm: string | null;
     editCategoryId: number | null;
+    editSubCategoryId: number | null;
 };
 
 const initialState: TabAndFormState = {
     activeTab: "Dashboard",
     openForm: null,
     editCategoryId: null,
+    editSubCategoryId: null,
 };
 
 const tabAndFormSlice = createSlice({
@@ -30,9 +32,23 @@ const tabAndFormSlice = createSlice({
         },
         resetEditCategoryId: (state) => {
             state.editCategoryId = null;
+        },
+        setEditSubCategoryId: (state, action: PayloadAction<number>) => {
+            state.editSubCategoryId = action.payload;
+        },
+        resetEditSubCategoryId: (state) => {
+            state.editSubCategoryId = null;
         }
     }
 });
 
-export const { setActiveTab, setOpenForm, resetOpenForm, setEditCategoryId, resetEditCategoryId } = tabAndFormSlice.actions;
+export const { 
+    setActiveTab, 
+    setOpenForm, 
+    resetOpenForm, 
+    setEditCategoryId, 
+    resetEditCategoryId, 
+    setEditSubCategoryId,
+    resetEditSubCategoryId
+} = tabAndFormSlice.actions;
 export default tabAndFormSlice.reducer;

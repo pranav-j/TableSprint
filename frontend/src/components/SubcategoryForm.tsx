@@ -2,8 +2,10 @@ import React, { useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
-import { resetOpenForm } from "../redux/tabAndFormSlice";
-import { createSubcategory } from "../redux/subcategorySlice";
+import { resetEditSubCategoryId, resetOpenForm } from "../redux/tabAndFormSlice";
+import { createSubcategory, editSubcategory } from "../redux/subcategorySlice";
+import { Subcategory } from "../redux/subcategorySlice";
+import imagePlaceholder from "../assets/image.png";
 
 import {
   TextField,
@@ -16,15 +18,27 @@ import {
 } from "@mui/material";
 
 const SubcategoryForm = () => {
+    const dispatch = useAppDispatch();
+    const editSubCategoryId = useAppSelector((state) => state.tabAndFormReducer.editSubCategoryId);
+    const subcategories = useAppSelector((state) => state.subcategoryReducer.subcategories);
+    const categories = useAppSelector((state) => state.categoryReducer.categories);
+
+    let subCategoryToEdit: Subcategory | undefined;
+    let categoryIdToEdit;
+
+    if(editSubCategoryId) {
+        subCategoryToEdit = subcategories.find((subcategory) => subcategory.id === editSubCategoryId)
+        console.log({ subCategoryToEdit });
+        categoryIdToEdit = categories.find((category) => category.categoryName === subCategoryToEdit?.categoryName)?.id
+    }
+
   const [formData, setFormData] = useState({
-    categoryId: "",
-    subcategoryName: "",
-    sequence: 0,
+    categoryId: categoryIdToEdit ? String(categoryIdToEdit) : "",
+    subcategoryName: subCategoryToEdit ? subCategoryToEdit.subcategoryName : "",
+    sequence: subCategoryToEdit ? subCategoryToEdit.sequence : 0,
     image: "",
   });
 
-  const dispatch = useAppDispatch();
-  const categories = useAppSelector((state) => state.categoryReducer.categories);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -44,12 +58,17 @@ const SubcategoryForm = () => {
 
   const handleSave = async () => {
     console.log("Form Data:", formData);
-    dispatch(createSubcategory(formData))
+    if(!editSubCategoryId) {
+        dispatch(createSubcategory(formData))
+    }
+    dispatch(editSubcategory({formData, subcategoryId: editSubCategoryId}))
     dispatch(resetOpenForm());
+    dispatch(resetEditSubCategoryId());
   };
 
   const handleCancel = () => {
     dispatch(resetOpenForm());
+    dispatch(resetEditSubCategoryId());
   };
 
   return (
@@ -123,7 +142,7 @@ const SubcategoryForm = () => {
         <div className="flex gap-3">
           <Box
             component="img"
-            src={formData.image || "/api/placeholder/100/100"}
+            src={formData.image || subCategoryToEdit?.image || imagePlaceholder}
             alt="Uploaded"
             sx={{
               width: 100,

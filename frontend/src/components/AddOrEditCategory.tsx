@@ -4,6 +4,7 @@ import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import { resetEditCategoryId, resetOpenForm } from "../redux/tabAndFormSlice";
 import { createCategory, editCategory } from "../redux/categorySlice";
+import imagePlaceholder from "../assets/image.png";
 
 import {
   TextField,
@@ -170,7 +171,7 @@ const CategoryForm = () => {
       <div className="flex gap-3">
         <Box
           component="img"
-          src={formData.image || categoryToEdit?.image || "https://via.placeholder.com/100"}
+          src={formData.image || categoryToEdit?.image || imagePlaceholder}
           alt="Uploaded"
           sx={{
             width: 100,

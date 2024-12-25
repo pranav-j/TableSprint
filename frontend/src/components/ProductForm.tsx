@@ -4,7 +4,7 @@ import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import { resetOpenForm } from "../redux/tabAndFormSlice";
 import { createProduct } from "../redux/productSlice";
-
+import imagePlaceholder from "../assets/image.png";
 
 import {
   TextField,
@@ -169,7 +169,7 @@ const ProductForm = () => {
         <div className="flex gap-4">
           <Box
             component="img"
-            src={formData.image || "/api/placeholder/100/100"}
+            src={formData.image || imagePlaceholder}
             alt="Product Preview"
             sx={{
               width: 100,
