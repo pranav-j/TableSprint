@@ -3,7 +3,7 @@ import { LuImagePlus } from "react-icons/lu";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch } from "../redux/reduxHooks";
 import { resetOpenForm } from "../redux/tabAndFormSlice";
-import axios from "axios";
+import { createCategory } from "../redux/categorySlice";
 
 import {
   TextField,
@@ -18,19 +18,28 @@ import {
 const CategoryForm = () => {
   const [formData, setFormData] = useState({
     categoryName: "",
-    categorySequence: "",
+    sequence: 0,
     status: "Active",
     image: "",
   });
 
   const dispatch = useAppDispatch();
 
+  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  //   setFormData({
+  //     ...formData,
+  //     [e.target.id]: e.target.value,
+  //   });
+  // };
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { id, value } = e.target;
     setFormData({
       ...formData,
-      [e.target.id]: e.target.value,
+      [id]: id === "sequence" ? Number(value) : value, // Convert 'sequence' to a number
     });
   };
+  
 
   const handleStatusChange = (event: SelectChangeEvent<string>) => {
     setFormData({
@@ -41,17 +50,14 @@ const CategoryForm = () => {
 
   const handleSave = async () => {
     console.log("Form Data:", formData);
+  
+    // Dispatch createCategory thunk
     try {
-      const response = await axios.post(
-        "http://localhost:3000/api/category",
-        formData,
-        {
-          withCredentials: true,
-        }
-      );
-      console.log("Form submitted successfully:", response.data);
+      await dispatch(createCategory(formData));
+      console.log("Category added successfully!");
+      dispatch(resetOpenForm());
     } catch (error) {
-      console.error("Error submitting form:", error);
+      console.error("Error adding category:", error);
     }
   };
 
@@ -87,10 +93,10 @@ const CategoryForm = () => {
         {/* Category Sequence */}
         <TextField
           required
-          id="categorySequence"
+          id="sequence"
           label="Category Sequence"
           type="number"
-          value={formData.categorySequence}
+          value={formData.sequence}
           onChange={handleInputChange}
           fullWidth
           sx={{

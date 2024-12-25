@@ -1,59 +1,3 @@
-// import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
-// import axios from 'axios';
-
-// type Category = {
-//   id: number;
-//   categoryName: string;
-//   sequence: number;
-//   image: string;
-//   status: 'Active' | 'Inactive';
-// };
-
-// type CategoryState = {
-//   categories: Category[];
-//   loading: boolean;
-//   error: string | null;
-// };
-
-// const initialState: CategoryState = {
-//   categories: [],
-//   loading: false,
-//   error: null,
-// };
-
-// export const fetchCategories = createAsyncThunk<Category[]>('categories/fetchCategories', async (_, thunkAPI) => {
-//   try {
-//     const response = await axios.get('/api/categories');
-//     return response.data.categories;
-//   } catch (error) {
-//     return thunkAPI.rejectWithValue(error.response?.data?.message || 'Failed to fetch categories');
-//   }
-// });
-
-// const categorySlice = createSlice({
-//   name: 'categories',
-//   initialState,
-//   reducers: {},
-//   extraReducers: (builder) => {
-//     builder
-//       .addCase(fetchCategories.pending, (state) => {
-//         state.loading = true;
-//         state.error = null;
-//       })
-//       .addCase(fetchCategories.fulfilled, (state, action: PayloadAction<Category[]>) => {
-//         state.loading = false;
-//         state.categories = action.payload;
-//       })
-//       .addCase(fetchCategories.rejected, (state, action) => {
-//         state.loading = false;
-//         state.error = action.payload as string;
-//       });
-//   },
-// });
-
-// export default categorySlice.reducer;
-
-
 import { createSlice, createAsyncThunk, PayloadAction } from "@reduxjs/toolkit";
 import axios from "axios";
 
@@ -62,7 +6,7 @@ export interface Category {
     categoryName: string;
     sequence: number;
     image: string;
-    status: "Active" | "Inactive";
+    status: string;
 }
 
 interface CategoryState {
@@ -89,8 +33,8 @@ export const fetchCategories = createAsyncThunk<Category[]>("categories/fetchCat
 });
 
 export const createCategory = createAsyncThunk<Category, Omit<Category, "id">>("categories/createCategory", async (newCategory) => {
-    const response = await axios.post(`${process.env.NEXT_PUBLIC_BASE_URL}/api/category`, newCategory, { withCredentials: true });
-    return response.data;
+    const response = await axios.post(`http://localhost:3000/api/category`, newCategory, { withCredentials: true });
+    return response.data.category;
 });
 
 export const editCategory = createAsyncThunk<Category, Category>("categories/editCategory", async (updatedCategory) => {

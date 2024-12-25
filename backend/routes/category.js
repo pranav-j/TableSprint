@@ -6,7 +6,7 @@ const router = express.Router();
 
 router.post("/category", authMiddleware, async (req, res) => {
   try {
-    const { categoryName, categorySequence, status, image } = req.body;
+    const { categoryName, sequence, status, image } = req.body;
     console.log("FROM CATEGORY.........", req.body, req.user);
 
     // Convert the base64 image string to a buffer
@@ -25,7 +25,7 @@ router.post("/category", authMiddleware, async (req, res) => {
     // Create the category record in the database with the S3 URL
     const category = await Category.create({
       categoryName,
-      categorySequence,
+      categorySequence: sequence,
       status,
       image: s3ImageUrl, // Store the S3 URL
       userId: req.user.dataValues.id,
@@ -34,15 +34,17 @@ router.post("/category", authMiddleware, async (req, res) => {
     console.log("CREATED category.............", category);
 
     res.status(201).json({
-      message: "Category created successfully",
-      category: {
-        id: category.id,
-        categoryName: category.categoryName,
-        categorySequence: category.categorySequence,
-        image: category.image,
-        status: category.status,
-      },
-    });
+        message: "Category created successfully",
+        category: {
+          id: category.id,
+          categoryName: category.categoryName,
+          sequence: category.categorySequence,
+          image: category.image,
+          status: category.status,
+        },
+      });
+      
+
   } catch (error) {
     console.error("Error creating category:", error);
     res.status(500).json({ message: "Internal server error" });
