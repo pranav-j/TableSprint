@@ -25,13 +25,6 @@ const CategoryForm = () => {
 
   const dispatch = useAppDispatch();
 
-  // const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-  //   setFormData({
-  //     ...formData,
-  //     [e.target.id]: e.target.value,
-  //   });
-  // };
-
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
     setFormData({
@@ -66,7 +59,8 @@ const CategoryForm = () => {
   }
 
   return (
-    <div className="m-3 flex flex-col h-full justify-between">
+    <div className="p-3 h-full">
+    <div className="flex flex-col h-full shadow-lg p-6 justify-between">
       {/* Form Fields */}
       <div>
         <div className="flex gap-4 items-center">
@@ -81,6 +75,7 @@ const CategoryForm = () => {
           id="categoryName"
           label="Category Name"
           value={formData.categoryName}
+          // value={(formData.categoryName === "" ? "OOOOO" : formData.categoryName)}
           onChange={handleInputChange}
           fullWidth
           sx={{
@@ -192,6 +187,7 @@ const CategoryForm = () => {
           Save
         </button>
       </div>
+    </div>
     </div>
   );
 };

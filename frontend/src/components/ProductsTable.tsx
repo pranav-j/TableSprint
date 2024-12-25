@@ -13,27 +13,27 @@ import { useState, useEffect } from "react";
 import { FaSort } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import {
-  fetchSubcategories,
-  deleteSubcategory,
-  Subcategory,
-} from "../redux/subcategorySlice";
+  fetchProducts,
+  deleteProduct,
+  Product,
+} from "../redux/productSlice";
 import { RootState } from "../redux/store";
 
-const columnHelper = createColumnHelper<Subcategory>();
+const columnHelper = createColumnHelper<Product>();
 
-const SubcategoryTable = () => {
+const ProductTable = () => {
   const dispatch = useAppDispatch();
-  const { subcategories, fetchSubcategoriesStatus, createSubcategoryStatus, error } = useAppSelector(
-    (state: RootState) => state.subcategoryReducer
+  const { products, fetchProductsStatus, createProductStatus, error } = useAppSelector(
+    (state: RootState) => state.productReducer
   );
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
   useEffect(() => {
-    if (fetchSubcategoriesStatus === "idle") {
-      dispatch(fetchSubcategories());
+    if (fetchProductsStatus === "idle") {
+      dispatch(fetchProducts());
     }
-  }, [fetchSubcategoriesStatus, dispatch, createSubcategoryStatus]);
+  }, [fetchProductsStatus, dispatch, createProductStatus]);
 
   const handleEdit = (id: number) => {
     console.log("Edit clicked for ID:", id);
@@ -41,7 +41,7 @@ const SubcategoryTable = () => {
   };
 
   const handleDelete = (id: number) => {
-    dispatch(deleteSubcategory(id));
+    dispatch(deleteProduct(id));
   };
 
   const columns = [
@@ -49,12 +49,16 @@ const SubcategoryTable = () => {
       header: "Id",
       cell: (info) => info.getValue(),
     }),
-    columnHelper.accessor("subcategoryName", {
-      header: "Subcategory name",
+    columnHelper.accessor("productName", {
+      header: "Product name",
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("categoryName", {
       header: "Category name",
+      cell: (info) => info.getValue(),
+    }),
+    columnHelper.accessor("subcategoryName", {
+      header: "Subcategory name",
       cell: (info) => info.getValue(),
     }),
     columnHelper.accessor("image", {
@@ -62,7 +66,7 @@ const SubcategoryTable = () => {
       cell: (info) => (
         <img
           src={info.getValue()}
-          alt={info.row.original.subcategoryName}
+          alt={info.row.original.productName}
           className="h-10 w-10 object-cover rounded mx-auto"
         />
       ),
@@ -78,10 +82,6 @@ const SubcategoryTable = () => {
           {info.getValue()}
         </span>
       ),
-    }),
-    columnHelper.accessor("sequence", {
-      header: "Sequence",
-      cell: (info) => info.getValue(),
     }),
     columnHelper.display({
       id: "actions",
@@ -106,7 +106,7 @@ const SubcategoryTable = () => {
   ];
 
   const table = useReactTable({
-    data: subcategories,
+    data: products,
     columns,
     state: {
       sorting,
@@ -116,11 +116,11 @@ const SubcategoryTable = () => {
     getSortedRowModel: getSortedRowModel(),
   });
 
-  if (fetchSubcategoriesStatus === "pending") {
+  if (fetchProductsStatus === "pending") {
     return <p>Loading...</p>;
   }
 
-  if (fetchSubcategoriesStatus === "rejected") {
+  if (fetchProductsStatus === "rejected") {
     return <p>Error: {error}</p>;
   }
 
@@ -175,4 +175,4 @@ const SubcategoryTable = () => {
   );
 };
 
-export default SubcategoryTable;
+export default ProductTable;

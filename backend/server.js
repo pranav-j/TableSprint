@@ -5,7 +5,8 @@ const bodyParser = require("body-parser");
 const cookieParser = require('cookie-parser');
 const authRoutes = require("./routes/auth");
 const categoryRoutes = require("./routes/category");
-const subcategory = require("./routes/subcategory")
+const subcategoryRoutes = require("./routes/subcategory");
+const productRoutes = require("./routes/product");
 const sequelize = require("./models/index");
 
 const app = express();
@@ -25,7 +26,8 @@ app.use(cors({
 
 app.use("/api/auth", authRoutes);
 app.use("/api", categoryRoutes);
-app.use("/api", subcategory);
+app.use("/api", subcategoryRoutes);
+app.use("/api", productRoutes);
 
 
 // Authenticate the database connection

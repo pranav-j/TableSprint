@@ -1,8 +1,10 @@
 import CategoryForm from "../components/AddOrEditCategory";
 import SubcategoryForm from "../components/SubcategoryForm";
+import ProductForm from "../components/ProductForm";
 import AdminView from "../components/AdminView";
 import Category from "../components/Category";
 import Subcategory from "../components/Subcategory";
+import Products from "../components/Products";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import { useAppSelector, useAppDispatch } from "../redux/reduxHooks";
@@ -30,9 +32,11 @@ const Dashboard = () => {
                     { (activeTab === "Dashboard" && !openForm) && <AdminView /> }
                     { (activeTab === "Category" && !openForm) && <Category /> }
                     { (activeTab === "Subcategory" && !openForm) && <Subcategory /> }
+                    { (activeTab === "Products" && !openForm) && <Products /> }
 
                     { (openForm === "Add Category" && activeTab === "Category") && <CategoryForm />}
                     { (openForm === "Add Subcategory" && activeTab === "Subcategory") && <SubcategoryForm /> }
+                    { (openForm === "Add Products" && activeTab === "Products") && <ProductForm /> }
                 </div>
             </div>
             

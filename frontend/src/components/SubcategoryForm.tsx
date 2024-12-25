@@ -1,8 +1,9 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
 import { resetOpenForm } from "../redux/tabAndFormSlice";
+import { createSubcategory } from "../redux/subcategorySlice";
 
 import {
   TextField,
@@ -13,7 +14,6 @@ import {
   Box,
   SelectChangeEvent,
 } from "@mui/material";
-import axios from "axios";
 
 const SubcategoryForm = () => {
   const [formData, setFormData] = useState({
@@ -44,8 +44,7 @@ const SubcategoryForm = () => {
 
   const handleSave = async () => {
     console.log("Form Data:", formData);
-    // Add your subcategory creation logic here
-    const response = await axios.post(`http://localhost:3000/api/subcategory`, formData, { withCredentials: true });
+    dispatch(createSubcategory(formData))
     dispatch(resetOpenForm());
   };
 
@@ -54,7 +53,8 @@ const SubcategoryForm = () => {
   };
 
   return (
-    <div className="m-3 flex flex-col h-full justify-between">
+    <div className="p-3 h-full">
+    <div className="flex flex-col h-full shadow-lg p-6 justify-between">
       <div>
         <div className="flex gap-4 items-center">
           <MdOutlineArrowBack />
@@ -176,6 +176,7 @@ const SubcategoryForm = () => {
           Save
         </button>
       </div>
+    </div>
     </div>
   );
 };

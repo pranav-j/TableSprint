@@ -78,4 +78,114 @@ router.get("/categories", authMiddleware, async (req, res) => {
     }
   });
 
+
+  router.put("/category/:id", authMiddleware, async (req, res) => {
+    try {
+      const categoryId = req.params.id;
+      const { categoryName, sequence, status, image } = req.body;
+      
+      // First, check if the category exists and belongs to the user
+      const existingCategory = await Category.findOne({
+        where: {
+          id: categoryId,
+          userId: req.user.dataValues.id
+        }
+      });
+  
+      if (!existingCategory) {
+        return res.status(404).json({ message: "Category not found or unauthorized" });
+      }
+  
+      // Prepare update object
+      const updateData = {
+        categoryName,
+        categorySequence: sequence,
+        status
+      };
+  
+      // Handle image update if new image is provided
+      if (image && image !== existingCategory.image) {
+        // Convert the base64 image string to a buffer
+        const base64Image = image.split(";base64,").pop();
+        const imageBuffer = Buffer.from(base64Image, "base64");
+  
+        // Upload the new image to S3
+        const s3ImageUrl = await uploadFileToS3({
+          originalname: `category-${categoryId}-${Date.now()}.jpg`,
+          buffer: imageBuffer,
+          mimetype: "image/jpeg"
+        }, "category-images");
+  
+        // Add the new image URL to update data
+        updateData.image = s3ImageUrl;
+  
+        // Note: You might want to delete the old image from S3 here
+        // This would require implementing a deleteFileFromS3 utility
+      }
+  
+      // Update the category
+      await existingCategory.update(updateData);
+  
+      // Fetch the updated category to return in response
+      const updatedCategory = await Category.findOne({
+        where: {
+          id: categoryId,
+          userId: req.user.dataValues.id
+        },
+        attributes: ["id", "categoryName", "categorySequence", "image", "status"]
+      });
+  
+      res.status(200).json({
+        message: "Category updated successfully",
+        category: {
+          id: updatedCategory.id,
+          categoryName: updatedCategory.categoryName,
+          sequence: updatedCategory.categorySequence,
+          image: updatedCategory.image,
+          status: updatedCategory.status,
+        }
+      });
+  
+    } catch (error) {
+      console.error("Error updating category:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+
+
+  router.delete("/category/:id", authMiddleware, async (req, res) => {
+    try {
+      const categoryId = req.params.id;
+      
+      // Check if the category exists and belongs to the user
+      const category = await Category.findOne({
+        where: {
+          id: categoryId,
+          userId: req.user.dataValues.id
+        }
+      });
+  
+      if (!category) {
+        return res.status(404).json({ 
+          message: "Category not found or unauthorized" 
+        });
+      }
+  
+      // Delete the category
+      await category.destroy();
+  
+      res.status(200).json({
+        message: "Category deleted successfully",
+        categoryId: categoryId
+      });
+  
+    } catch (error) {
+      console.error("Error deleting category:", error);
+      res.status(500).json({ message: "Internal server error" });
+    }
+  });
+
+
+
 module.exports = router;

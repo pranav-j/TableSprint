@@ -3,11 +3,11 @@ import axios from "axios";
 
 // Interface for the form input
 export interface SubcategoryFormData {
-    categoryId: number;
+    categoryId: number | string;
     subcategoryName: string;
     sequence: number;
     image: string;
-    status: string;
+    // status: string;
 }
 
 // Interface for the API response
