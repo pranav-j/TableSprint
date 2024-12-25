@@ -2,7 +2,10 @@ import React, { useState } from "react";
 import { LuImagePlus } from "react-icons/lu";
 import { MdOutlineArrowBack } from "react-icons/md";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
-import { resetEditSubCategoryId, resetOpenForm } from "../redux/tabAndFormSlice";
+import {
+  resetEditSubCategoryId,
+  resetOpenForm,
+} from "../redux/tabAndFormSlice";
 import { createSubcategory, editSubcategory } from "../redux/subcategorySlice";
 import { Subcategory } from "../redux/subcategorySlice";
 import imagePlaceholder from "../assets/image.png";
@@ -18,19 +21,29 @@ import {
 } from "@mui/material";
 
 const SubcategoryForm = () => {
-    const dispatch = useAppDispatch();
-    const editSubCategoryId = useAppSelector((state) => state.tabAndFormReducer.editSubCategoryId);
-    const subcategories = useAppSelector((state) => state.subcategoryReducer.subcategories);
-    const categories = useAppSelector((state) => state.categoryReducer.categories);
+  const dispatch = useAppDispatch();
+  const editSubCategoryId = useAppSelector(
+    (state) => state.tabAndFormReducer.editSubCategoryId
+  );
+  const subcategories = useAppSelector(
+    (state) => state.subcategoryReducer.subcategories
+  );
+  const categories = useAppSelector(
+    (state) => state.categoryReducer.categories
+  );
 
-    let subCategoryToEdit: Subcategory | undefined;
-    let categoryIdToEdit;
+  let subCategoryToEdit: Subcategory | undefined;
+  let categoryIdToEdit;
 
-    if(editSubCategoryId) {
-        subCategoryToEdit = subcategories.find((subcategory) => subcategory.id === editSubCategoryId)
-        console.log({ subCategoryToEdit });
-        categoryIdToEdit = categories.find((category) => category.categoryName === subCategoryToEdit?.categoryName)?.id
-    }
+  if (editSubCategoryId) {
+    subCategoryToEdit = subcategories.find(
+      (subcategory) => subcategory.id === editSubCategoryId
+    );
+    console.log({ subCategoryToEdit });
+    categoryIdToEdit = categories.find(
+      (category) => category.categoryName === subCategoryToEdit?.categoryName
+    )?.id;
+  }
 
   const [formData, setFormData] = useState({
     categoryId: categoryIdToEdit ? String(categoryIdToEdit) : "",
@@ -38,7 +51,6 @@ const SubcategoryForm = () => {
     sequence: subCategoryToEdit ? subCategoryToEdit.sequence : 0,
     image: "",
   });
-
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { id, value } = e.target;
@@ -55,13 +67,12 @@ const SubcategoryForm = () => {
     });
   };
 
-
   const handleSave = async () => {
     console.log("Form Data:", formData);
-    if(!editSubCategoryId) {
-        dispatch(createSubcategory(formData))
+    if (!editSubCategoryId) {
+      dispatch(createSubcategory(formData));
     }
-    dispatch(editSubcategory({formData, subcategoryId: editSubCategoryId}))
+    dispatch(editSubcategory({ formData, subcategoryId: editSubCategoryId }));
     dispatch(resetOpenForm());
     dispatch(resetEditSubCategoryId());
   };
@@ -73,129 +84,133 @@ const SubcategoryForm = () => {
 
   return (
     <div className="p-3 h-full">
-    <div className="flex flex-col h-full shadow-lg p-6 justify-between">
-      <div>
-        <div className="flex gap-4 items-center">
-          <MdOutlineArrowBack />
-          <h2 className="font-semibold text-xl">Add Sub Category</h2>
-        </div>
+      <div className="flex flex-col h-full shadow-lg p-6 justify-between">
+        <div>
+          <div className="flex gap-4 items-center">
+            <MdOutlineArrowBack />
+            <h2 className="font-semibold text-xl">
+              {editSubCategoryId ? "Edit" : "Add"} Sub Category
+            </h2>
+          </div>
 
-        <div className="flex gap-5 mb-3">
-          {/* Category Dropdown */}
-          <FormControl
-            fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 4,
-              },
-            }}
-          >
-            <InputLabel id="category-label">Category</InputLabel>
-            <Select
-              labelId="category-label"
-              id="categoryId"
-              value={formData.categoryId}
-              onChange={handleCategoryChange}
-              label="Category"
+          <div className="flex gap-5 mb-3">
+            {/* Category Dropdown */}
+            <FormControl
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 4,
+                },
+              }}
             >
-              {categories.map((category) => (
-                <MenuItem key={category.id} value={category.id}>
-                  {category.categoryName}
-                </MenuItem>
-              ))}
-            </Select>
-          </FormControl>
+              <InputLabel id="category-label">Category</InputLabel>
+              <Select
+                labelId="category-label"
+                id="categoryId"
+                value={formData.categoryId}
+                onChange={handleCategoryChange}
+                label="Category"
+              >
+                {categories.map((category) => (
+                  <MenuItem key={category.id} value={category.id}>
+                    {category.categoryName}
+                  </MenuItem>
+                ))}
+              </Select>
+            </FormControl>
 
-          {/* Subcategory Name */}
-          <TextField
-            required
-            id="subcategoryName"
-            label="Sub Category Name"
-            value={formData.subcategoryName}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 4,
-              },
-            }}
-          />
-
-          {/* Sequence */}
-          <TextField
-            required
-            id="sequence"
-            label="Sub Category Sequence"
-            type="number"
-            value={formData.sequence}
-            onChange={handleInputChange}
-            fullWidth
-            sx={{
-              "& .MuiOutlinedInput-root": {
-                borderRadius: 4,
-              },
-            }}
-          />
-        </div>
-
-        {/* Image Upload and Preview */}
-        <div className="flex gap-3">
-          <Box
-            component="img"
-            src={formData.image || subCategoryToEdit?.image || imagePlaceholder}
-            alt="Uploaded"
-            sx={{
-              width: 100,
-              height: 100,
-              objectFit: "cover",
-              borderRadius: 1,
-            }}
-          />
-          <Box
-            className="w-52 h-24 border-2 border-dashed border-gray-400 flex items-center justify-center rounded-[10px] cursor-pointer relative"
-            onClick={() => document.getElementById("image-upload")?.click()}
-          >
-            <span className="text-center text-sm flex flex-col justify-center items-center">
-              <LuImagePlus className="size-10" />
-              Upload Maximum allowed file size is 10MB
-            </span>
-            <input
-              type="file"
-              accept="image/*"
-              id="image-upload"
-              className="hidden"
-              onChange={(e) => {
-                if (e.target.files && e.target.files[0]) {
-                  const reader = new FileReader();
-                  reader.onload = () => {
-                    setFormData({
-                      ...formData,
-                      image: reader.result as string,
-                    });
-                  };
-                  reader.readAsDataURL(e.target.files[0]);
-                }
+            {/* Subcategory Name */}
+            <TextField
+              required
+              id="subcategoryName"
+              label="Sub Category Name"
+              value={formData.subcategoryName}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 4,
+                },
               }}
             />
-          </Box>
+
+            {/* Sequence */}
+            <TextField
+              required
+              id="sequence"
+              label="Sub Category Sequence"
+              type="number"
+              value={formData.sequence}
+              onChange={handleInputChange}
+              fullWidth
+              sx={{
+                "& .MuiOutlinedInput-root": {
+                  borderRadius: 4,
+                },
+              }}
+            />
+          </div>
+
+          {/* Image Upload and Preview */}
+          <div className="flex gap-3">
+            <Box
+              component="img"
+              src={
+                formData.image || subCategoryToEdit?.image || imagePlaceholder
+              }
+              alt="Uploaded"
+              sx={{
+                width: 100,
+                height: 100,
+                objectFit: "cover",
+                borderRadius: 1,
+              }}
+            />
+            <Box
+              className="w-52 h-24 border-2 border-dashed border-gray-400 flex items-center justify-center rounded-[10px] cursor-pointer relative"
+              onClick={() => document.getElementById("image-upload")?.click()}
+            >
+              <span className="text-center text-sm flex flex-col justify-center items-center">
+                <LuImagePlus className="size-10" />
+                Upload Maximum allowed file size is 10MB
+              </span>
+              <input
+                type="file"
+                accept="image/*"
+                id="image-upload"
+                className="hidden"
+                onChange={(e) => {
+                  if (e.target.files && e.target.files[0]) {
+                    const reader = new FileReader();
+                    reader.onload = () => {
+                      setFormData({
+                        ...formData,
+                        image: reader.result as string,
+                      });
+                    };
+                    reader.readAsDataURL(e.target.files[0]);
+                  }
+                }}
+              />
+            </Box>
+          </div>
+        </div>
+
+        <div className="flex justify-end space-x-4 mt-4">
+          <button
+            className="px-4 py-2 border border-gray-500 text-gray-500 rounded hover:bg-gray-100"
+            onClick={handleCancel}
+          >
+            Cancel
+          </button>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={handleSave}
+          >
+            Save
+          </button>
         </div>
       </div>
-
-      <div className="flex justify-end space-x-4 mt-4">
-        <button
-          className="px-4 py-2 border border-gray-500 text-gray-500 rounded hover:bg-gray-100"
-          onClick={handleCancel}
-        >
-          Cancel
-        </button>
-        <button
-          className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-          onClick={handleSave}
-        >
-          Save
-        </button>
-      </div>
-    </div>
     </div>
   );
 };

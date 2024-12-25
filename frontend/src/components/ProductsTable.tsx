@@ -12,20 +12,16 @@ import {
 import { useState, useEffect } from "react";
 import { FaSort } from "react-icons/fa";
 import { useAppDispatch, useAppSelector } from "../redux/reduxHooks";
-import {
-  fetchProducts,
-  deleteProduct,
-  Product,
-} from "../redux/productSlice";
+import { fetchProducts, deleteProduct, Product } from "../redux/productSlice";
 import { RootState } from "../redux/store";
+import { setEditProductId } from "../redux/tabAndFormSlice";
 
 const columnHelper = createColumnHelper<Product>();
 
 const ProductTable = () => {
   const dispatch = useAppDispatch();
-  const { products, fetchProductsStatus, createProductStatus, error } = useAppSelector(
-    (state: RootState) => state.productReducer
-  );
+  const { products, fetchProductsStatus, createProductStatus, error } =
+    useAppSelector((state: RootState) => state.productReducer);
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -38,6 +34,7 @@ const ProductTable = () => {
   const handleEdit = (id: number) => {
     console.log("Edit clicked for ID:", id);
     // You can trigger a modal or navigate to an edit page
+    dispatch(setEditProductId(id));
   };
 
   const handleDelete = (id: number) => {
@@ -152,19 +149,13 @@ const ProductTable = () => {
         </thead>
         <tbody className="bg-white">
           {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className="bg-[#F2F2F2] hover:bg-gray-200"
-            >
+            <tr key={row.id} className="bg-[#F2F2F2] hover:bg-gray-200">
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
                   className="px-6 py-4 whitespace-nowrap text-base text-gray-900 border-b-[10px] border-white text-center"
                 >
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext()
-                  )}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>

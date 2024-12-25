@@ -20,6 +20,7 @@ const Dashboard = () => {
     const openForm = useAppSelector((state) => state.tabAndFormReducer.openForm);
     const editCategoryId = useAppSelector((state) => state.tabAndFormReducer.editCategoryId);
     const editSubCategoryId = useAppSelector((state) => state.tabAndFormReducer.editSubCategoryId);
+    const editProductId = useAppSelector((state) => state.tabAndFormReducer.editProductId);
 
     useEffect(() => {
         dispatch(fetchCategories());
@@ -34,11 +35,11 @@ const Dashboard = () => {
                     { (activeTab === "Dashboard" && !openForm) && <AdminView /> }
                     { (activeTab === "Category" && !openForm && !editCategoryId) && <Category /> }
                     { (activeTab === "Subcategory" && !openForm && !editSubCategoryId) && <Subcategory /> }
-                    { (activeTab === "Products" && !openForm) && <Products /> }
+                    { (activeTab === "Products" && !openForm && !editProductId) && <Products /> }
 
                     { ((openForm === "Add Category" && activeTab === "Category") || (editCategoryId && activeTab === "Category")) && <CategoryForm />}
                     { ((openForm === "Add Subcategory" && activeTab === "Subcategory") || (editSubCategoryId && activeTab === "Subcategory")) && <SubcategoryForm /> }
-                    { (openForm === "Add Products" && activeTab === "Products") && <ProductForm /> }
+                    { ((openForm === "Add Products" && activeTab === "Products") || (editProductId && activeTab === "Products")) && <ProductForm /> }
                 </div>
             </div>
             

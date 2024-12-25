@@ -24,9 +24,12 @@ const columnHelper = createColumnHelper<Subcategory>();
 
 const SubcategoryTable = () => {
   const dispatch = useAppDispatch();
-  const { subcategories, fetchSubcategoriesStatus, createSubcategoryStatus, error } = useAppSelector(
-    (state) => state.subcategoryReducer
-  );
+  const {
+    subcategories,
+    fetchSubcategoriesStatus,
+    createSubcategoryStatus,
+    error,
+  } = useAppSelector((state) => state.subcategoryReducer);
 
   const [sorting, setSorting] = useState<SortingState>([]);
 
@@ -154,19 +157,13 @@ const SubcategoryTable = () => {
         </thead>
         <tbody className="bg-white">
           {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className="bg-[#F2F2F2] hover:bg-gray-200"
-            >
+            <tr key={row.id} className="bg-[#F2F2F2] hover:bg-gray-200">
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
                   className="px-6 py-4 whitespace-nowrap text-base text-gray-900 border-b-[10px] border-white text-center"
                 >
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext()
-                  )}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>

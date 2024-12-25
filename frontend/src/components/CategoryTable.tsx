@@ -24,7 +24,7 @@ const columnHelper = createColumnHelper<Category>();
 
 const CategoryTable = () => {
   // const dispatch = useDispatch();
-  const dispatch = useAppDispatch()
+  const dispatch = useAppDispatch();
   const { categories, fetchCategoriesStatus, error } = useAppSelector(
     (state: RootState) => state.categoryReducer
   );
@@ -149,19 +149,13 @@ const CategoryTable = () => {
         </thead>
         <tbody className="bg-white">
           {table.getRowModel().rows.map((row) => (
-            <tr
-              key={row.id}
-              className="bg-[#F2F2F2] hover:bg-gray-200"
-            >
+            <tr key={row.id} className="bg-[#F2F2F2] hover:bg-gray-200">
               {row.getVisibleCells().map((cell) => (
                 <td
                   key={cell.id}
                   className="px-6 py-4 whitespace-nowrap text-base text-gray-900 border-b-[10px] border-white text-center"
                 >
-                  {flexRender(
-                    cell.column.columnDef.cell,
-                    cell.getContext()
-                  )}
+                  {flexRender(cell.column.columnDef.cell, cell.getContext())}
                 </td>
               ))}
             </tr>
