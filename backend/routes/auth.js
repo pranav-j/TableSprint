@@ -37,13 +37,12 @@ router.post("/login", async (req, res) => {
 
         const token = jwt.sign({ userId: user.id }, "your_jwt_secret", { expiresIn: "1h" });
 
-        // Set the token as a secure HTTP-only cookie
         res.cookie('authToken', token, {
             httpOnly: true, // Prevent JavaScript access to the cookie
             // secure: process.env.NODE_ENV === 'production', // Use secure cookies in production
             secure: false,
-            sameSite: 'strict', // Prevent CSRF
-            maxAge: 3600000 // Cookie expiration in milliseconds (1 hour)
+            sameSite: 'strict',
+            maxAge: 72000000 
         });
 
         res.status(200).json({ 
