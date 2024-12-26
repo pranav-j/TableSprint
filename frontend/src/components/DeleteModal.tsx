@@ -1,4 +1,3 @@
-import { AlertTriangle } from 'lucide-react';
 import { useAppDispatch, useAppSelector } from '../redux/reduxHooks';
 import { resetDeleteId } from '../redux/tabAndFormSlice';
 import { deleteCategory } from '../redux/categorySlice';

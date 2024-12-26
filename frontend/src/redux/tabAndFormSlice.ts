@@ -8,6 +8,7 @@ interface TabAndFormState {
     editProductId: number | null;
     deleteId: number | null;
     searchParam: string | null;
+    showLogoutModal: boolean
 };
 
 const initialState: TabAndFormState = {
@@ -18,6 +19,7 @@ const initialState: TabAndFormState = {
     editProductId: null,
     deleteId: null,
     searchParam: null,
+    showLogoutModal: false
 };
 
 const tabAndFormSlice = createSlice({
@@ -62,6 +64,9 @@ const tabAndFormSlice = createSlice({
         },
         resetSearchParam: (state) => {
             state.searchParam = null;
+        },
+        toggleLogoutModal: (state) => {
+            state.showLogoutModal = !state.showLogoutModal
         }
     }
 });
@@ -80,5 +85,6 @@ export const {
     resetDeleteId,
     setSearchParam,
     resetSearchParam,
+    toggleLogoutModal
 } = tabAndFormSlice.actions;
 export default tabAndFormSlice.reducer;

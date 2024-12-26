@@ -1,8 +1,7 @@
-// config/config.js
 module.exports = {
-    username: "postgres",      // Replace with your Postgres username
-    password: "your_password",  // Replace with your Postgres password
-    database: "your_database",      // Replace with your database name
-    host: "localhost",             // Default Postgres host
-    dialect: "postgres",           // Database dialect
+    username: process.env.POSTGRES_USERNAME,      
+    password: process.env.POSTGRES_PASSWORD, 
+    database: process.env.POSTGRES_DB,    
+    host: "localhost",            
+    dialect: "postgres",
 };

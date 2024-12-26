@@ -8,10 +8,12 @@ import Products from "../components/Products";
 import Header from "../components/Header";
 import Sidebar from "../components/Sidebar";
 import DeleteModal from "../components/DeleteModal";
+import LogoutModal from "../components/LogoutModal";
 import { useAppSelector, useAppDispatch } from "../redux/reduxHooks";
 import { fetchCategories } from "../redux/categorySlice";
 import { fetchSubcategories } from "../redux/subcategorySlice";
 import { useEffect } from "react";
+
 
 
 const Dashboard = () => {
@@ -42,6 +44,7 @@ const Dashboard = () => {
                     { ((openForm === "Add Subcategory" && activeTab === "Subcategory") || (editSubCategoryId && activeTab === "Subcategory")) && <SubcategoryForm /> }
                     { ((openForm === "Add Products" && activeTab === "Products") || (editProductId && activeTab === "Products")) && <ProductForm /> }
                     <DeleteModal />
+                    <LogoutModal />
                 </div>
             </div>
             

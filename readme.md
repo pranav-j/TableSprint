@@ -34,9 +34,14 @@ TWT_SECRET=your_jwt_secret
 FRONTEND_URL=http://localhost:5173
 PORT=3000
 
-accessKeyId="your_AWS_accessKeyId_with_S3_access"
-secretAccessKey="your_AWS_secretAccessKey"
+accessKeyId=your_AWS_accessKeyId_with_S3_access
+secretAccessKey=your_AWS_secretAccessKey
+
+POSTGRES_USERNAME=postgres
+POSTGRES_PASSWORD=your_password
+POSTGRES_DB=your_database
 ```
+Spin up a PostgreSQL instance
 ```bash
   yarn dev
 ```
