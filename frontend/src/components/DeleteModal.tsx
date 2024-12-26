@@ -53,7 +53,7 @@ const DeleteModal = () => {
             
             <button
               onClick={onConfirm}
-              className="flex-1 px-4 py-2 rounded-full bg-[#662671] text-white hover:bg-purple-700 transition-colors"
+              className="flex-1 px-4 py-2 rounded-full bg-primary text-white hover:bg-purple-700 transition-colors"
             >
               Confirm
             </button>

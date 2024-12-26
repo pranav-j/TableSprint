@@ -233,7 +233,7 @@ const ProductForm = () => {
             Cancel
           </button>
           <button
-            className="px-14 py-2 bg-[#662671] text-white rounded-full hover:bg-purple-700"
+            className="px-14 py-2 bg-primary text-white rounded-full hover:bg-purple-700"
             onClick={handleSave}
             disabled={
               !formData.categoryId ||
