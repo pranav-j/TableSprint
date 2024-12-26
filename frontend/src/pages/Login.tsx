@@ -35,14 +35,13 @@ const Login = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setError(null); // Reset error on form submission
+    setError(null);
     try {
       const response = await axios.post(`http://localhost:3000/api/auth/login`, formData, {withCredentials: true});
 
       if (response.status === 200) {
         const { token, username } = response.data;
-        setUsername(username); // Set the username
-        // console.log('Token:', token);
+        setUsername(username);
         navigate('/dashboard');
       }
     } catch (err: any) {
@@ -61,26 +60,21 @@ const Login = () => {
         backgroundImage: `url(${background})`,
       }}
     >
-      {/* Optional overlay to ensure form readability */}
       <div className="min-h-screen bg-[#5C218B]/30 flex items-center p-20">
         <div className="bg-white rounded-lg shadow-lg p-8 w-full max-w-md">
-          {/* Logo and Title */}
           <div className="flex flex-col items-center mb-8">
             <img className="mb-4" src={TSlogo} alt="TSlogo" />
             <h1 className="text-xl text-gray-600">Welcome to TableSprint admin</h1>
           </div>
 
-          {/* Error Message */}
           {error && <div className="text-red-500 text-center mb-4">{error}</div>}
 
-          {/* Success Message */}
           {username && (
             <div className="text-green-500 text-center mb-4">
               Welcome back, {username}!
             </div>
           )}
 
-          {/* Form */}
           <form className="space-y-6" onSubmit={handleSubmit}>
             <TextField
               required
