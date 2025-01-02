@@ -9,7 +9,6 @@ export interface ProductFormData {
     status?: string;
 }
 
-// Interface for the API response
 export interface Product {
     id: number;
     productName: string;
